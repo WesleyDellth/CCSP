@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>แผนที่ความคิด CCSP — ทุกบท + ตัวอย่าง (ภาษาไทย)</title>
+<style>
+:root{
+  --bg:#0b1018; --bg2:#121a26; --card:#182233; --line:#2a3a52;
+  --text:#eaf0f8; --muted:#8fa0b8; --accent:#4cc9f0; --accent2:#7c5cff;
+  --good:#3dd68c; --warn:#ffc857; --bad:#ff6b81; --chip:#223044;
+  --c1:#4cc9f0; --c2:#7c5cff; --c3:#3dd68c; --c4:#ff9f43; --c5:#ff6b81; --c6:#f4d35e; --c7:#48bfe3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font:15px/1.55 "Sarabun","Noto Sans Thai","Segoe UI",system-ui,sans-serif}
+button,input,select{font:inherit}
+.app{max-width:1360px;margin:0 auto;padding:18px 16px 72px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:grid;place-items:center;font-weight:800;color:#081018;font-size:13px}
+h1{font-size:1.22rem;margin:0}
+.sub{color:var(--muted);font-size:.84rem;margin-top:2px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.78rem;color:var(--muted)}
+.chip b{color:var(--text);font-weight:650}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.toolbar input,.btn{
+  background:var(--bg2);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:8px 12px
+}
+.toolbar input{min-width:220px;flex:1}
+.btn{cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.ghost{background:transparent}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,420px);gap:14px}
+@media (max-width:980px){.layout{grid-template-columns:1fr}}
+.board{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 14px 22px;
+  box-shadow:0 10px 40px rgba(0,0,0,.28);min-height:70vh}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0 4px}
+.lg{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%}
+.node{margin:0;padding:0;list-style:none}
+.node > li{margin:4px 0}
+.branch{border-left:2px solid var(--line);margin-left:12px;padding-left:10px}
+.item{
+  display:flex;align-items:flex-start;gap:8px;padding:7px 9px;border-radius:10px;
+  border:1px solid transparent;cursor:pointer;user-select:none
+}
+.item:hover{background:#1e2b3e;border-color:var(--line)}
+.item.active{background:#1d3148;border-color:var(--accent)}
+.item.hit{outline:1px solid var(--warn)}
+.toggle{
+  width:18px;height:18px;border-radius:6px;border:1px solid var(--line);
+  background:var(--bg2);color:var(--muted);display:grid;place-items:center;
+  font-size:11px;flex:0 0 18px;margin-top:2px
+}
+.toggle.empty{opacity:.25;border-style:dashed}
+.badge{font-size:.68rem;border-radius:999px;padding:1px 7px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;margin-left:auto}
+.title{flex:1;min-width:0}
+.title .en{display:block;color:var(--muted);font-size:.74rem;margin-top:1px}
+.mark{width:8px;height:8px;border-radius:50%;margin-top:7px;flex:0 0 8px}
+.detail{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 16px 20px;
+  position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto
+}
+.detail h2{margin:0 0 6px;font-size:1.05rem}
+.detail .meta{color:var(--muted);font-size:.82rem;margin-bottom:10px}
+.kicker{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.detail ul{margin:8px 0 0;padding-left:18px}
+.detail li{margin:5px 0}
+.note{background:#121c2a;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:12px;color:#c9d6e8;font-size:.9rem}
+.ex{background:#16261c;border:1px solid #2d5a3e;border-radius:12px;padding:10px 12px;margin-top:10px;color:#d4f0dc;font-size:.9rem}
+.ex b,.note b{color:#fff}
+.tip{border-left:3px solid var(--warn);padding-left:10px;margin-top:10px;color:#f3e2b3}
+.weights{display:grid;grid-template-columns:1fr auto;gap:6px 10px;margin-top:8px;font-size:.88rem}
+.bar{height:7px;background:#243044;border-radius:99px;overflow:hidden;margin-top:4px}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+footer.disc{margin-top:18px;color:var(--muted);font-size:.78rem}
+.ch-2 .mark{background:var(--c1)}
+.ch-3 .mark{background:var(--c2)}
+.ch-4 .mark{background:var(--c3)}
+.ch-5 .mark{background:var(--c4)}
+.ch-6 .mark{background:var(--c5)}
+.ch-7 .mark{background:var(--c6)}
+.ch-8 .mark{background:var(--c7)}
+.ch-1 .mark{background:#8fa0b8}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">แผนที่</div>
+      <div>
+        <h1>แผนที่ความคิดสอบ CCSP — ทุกบท + ตัวอย่าง</h1>
+        <div class="sub">คลิกแต่ละจุดเพื่ออ่านคำอธิบายภาษาไทยและตัวอย่างสถานการณ์ · จาก All-in-One ฉบับที่ 3 · สอบโครงสร้างปี 2022 · สื่อทบทวนส่วนบุคคล</div>
+      </div>
+    </div>
+    <div class="stats">
+      <span class="chip">7 บท + ภาคผนวก</span>
+      <span class="chip">ทุกจุดมี <b>คำอธิบาย + ตัวอย่าง</b></span>
+      <span class="chip">ผ่าน <b>700 / 1000</b></span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="ค้นหา เช่น encryption, RTO, GDPR, ผู้ควบคุม, CASB…" />
+    <button class="btn" id="expandAll">ขยายทั้งหมด</button>
+    <button class="btn" id="collapseAll">ย่อทั้งหมด</button>
+    <button class="btn ghost" id="reset">ล้างค้นหา</button>
+  </div>
+
+  <div class="layout">
+    <section class="board">
+      <div class="legend">
+        <span class="lg"><i class="dot" style="background:var(--c1)"></i>บท 2 / D1 17%</span>
+        <span class="lg"><i class="dot" style="background:var(--c2)"></i>บท 3 / D2 20%</span>
+        <span class="lg"><i class="dot" style="background:var(--c3)"></i>บท 4 / D3 17%</span>
+        <span class="lg"><i class="dot" style="background:var(--c4)"></i>บท 5 / D4 17%</span>
+        <span class="lg"><i class="dot" style="background:var(--c5)"></i>บท 6 / D5 16%</span>
+        <span class="lg"><i class="dot" style="background:var(--c6)"></i>บท 7 / D6 13%</span>
+      </div>
+      <ul class="node" id="tree"></ul>
+    </section>
+    <aside class="detail" id="detail"></aside>
+  </div>
+  <footer class="disc">ใช้เพื่อทบทวนส่วนบุคคลเท่านั้น ไม่ใช่เนื้อหาอย่างเป็นทางการของ (ISC)² · ตรวจข้อกำหนดล่าสุดที่ isc2.org/ccsp</footer>
+</div>
+
+<script>
+const HOME = {
+  kicker:"จุดศูนย์กลาง",
+  title:"CCSP · Certified Cloud Security Professional",
+  meta:"คลิกโหนดทางซ้าย — แต่ละจุดมีคำอธิบายและตัวอย่างสถานการณ์",
+  body:`
+    <p>แผนที่นี้จัดตาม 7 บทของหนังสือ และผูกกับ 6 โดเมนข้อสอบปี 2022 คลิกจุดย่อยเพื่อเปิดคำอธิบาย + ตัวอย่างทางขวา</p>
+    <div class="weights">
+      <div>D1 แนวคิด สถาปัตยกรรม การออกแบบ</div><b>17%</b>
+      <div>D2 ความปลอดภัยของข้อมูล</div><b>20%</b>
+      <div>D3 แพลตฟอร์มและโครงสร้างพื้นฐาน</div><b>17%</b>
+      <div>D4 ความปลอดภัยของแอปพลิเคชัน</div><b>17%</b>
+      <div>D5 การปฏิบัติการความปลอดภัย</div><b>16%</b>
+      <div>D6 กฎหมาย ความเสี่ยง Compliance</div><b>13%</b>
+    </div>
+    <div class="bar" style="margin-top:10px"><i style="width:100%"></i></div>
+    <div class="tip">ทิปสอบ: ถามบ่อยเรื่อง shared responsibility ตาม IaaS/PaaS/SaaS, ใครเป็น data controller, และ RTO ต่างจาก RPO อย่างไร</div>
+  `
+};
+
+const DATA = [
+{
+  id:"ch1", ch:"1", color:"ch-1",
+  th:"บทที่ 1 · วิธีได้ CCSP และความรู้พื้นฐาน",
+  en:"How to Obtain the CCSP and Introduction to Security",
+  explain:"บทเปิดทางเข้าใบรับรอง ขั้นตอนสอบ และทบทวนหลักความปลอดภัยที่ทุกโดเมนใช้ร่วมกัน ได้แก่ CIA+Privacy, AAA, การป้องกันเชิงลึก และการบริหารความเสี่ยงกับ BCDR",
+  example:"สมชายทำงาน IT มา 6 ปี เป็นนักวิเคราะห์ความปลอดภัย 3 ปี และดูแล AWS 1 ปี — เข้าเกณฑ์ประสบการณ์แล้ว ถ้าเพิ่งจบมหาวิทยาลัยและสอบผ่าน จะได้สถานะ Associate แล้วเก็บประสบการณ์ภายใน 6 ปี",
+  kids:[
+    {th:"ทำไมต้องมีใบรับรอง", en:"Why get certified",
+     explain:"CCSP เป็นหลักฐานอิสระว่าเข้าใจความปลอดภัยคลาวด์ ไม่ใช่แค่ดาต้าเซ็นเตอร์ดั้งเดิม ใช้ยื่นนายจ้าง หน่วยงานกำกับ และกรอบ DoD 8570 (IAT III / IASAE III)",
+     example:"บริษัทรับงานราชการสหรัฐต้องให้เจ้าหน้าที่คลาวด์มีใบที่อยู่ใน DoD 8570 — CCSP ครอบคลุม IASAE III ซึ่ง CISSP เดี่ยว ๆ ครอบคลุมแค่ IASAE II"},
+    {th:"ขั้นตอนการรับรอง", en:"How to get certified",
+     explain:"ต้องครบประสบการณ์ สอบผ่าน ยอมรับจรรยาบรรณ มีสมาชิก (ISC)² รับรองใบสมัคร แล้วรักษาสถานะด้วย CPE และค่าบำรุงรักษา",
+     example:"สอบผ่านเดือนมีนาคม แต่ยังหาคนรับรองไม่ได้จนมิถุนายน — ใบยังไม่สมบูรณ์จนกว่า endorsement จะถูกอนุมัติ",
+     kids:[
+      {th:"ประสบการณ์ทำงาน", en:"Experience requirements",
+       explain:"IT เต็มเวลา 5 ปี ในนั้นความปลอดภัยอย่างน้อย 3 ปี และอย่างน้อย 1 ปีในโดเมน CCSP CCSK ทดแทนส่วนโดเมนได้ CISSP ทดแทนประสบการณ์ทั้งหมดได้",
+       example:"มี CISSP อยู่แล้ว ไม่ต้องนับปีงานซ้ำ — ยื่น CISSP เป็นตัวแทนประสบการณ์ CCSP ได้ทั้งก้อน"},
+      {th:"สอบผ่าน + จรรยาบรรณ", en:"Exam + Code of Ethics",
+       explain:"ข้อสอบ 4 ชม. 150 ข้อ (25 ข้อไม่คิดคะแนน) ผ่านที่ 700/1000 และต้องยอมรับจรรยาบรรณ (ISC)² ซึ่งเน้นปกป้องสังคม ทำตัวเป็นมืออาชีพ ช่วยเหลือวิชาชีพ และพัฒนาตนเอง",
+       example:"ผู้เข้าสอบโพสต์ข้อจำออกโซเชียลหลังสอบ — ผิดจรรยาบรรณ อาจถูกเพิกถอนผลสอบหรือใบรับรอง"},
+      {th:"การรับรองโดยสมาชิก (ISC)²", en:"Endorsement",
+       explain:"สมาชิกที่รู้จักผู้สมัครต้องรับรองว่าประสบการณ์และคุณสมบัติเป็นจริง ไม่ใช่แค่เซ็นชื่อให้คนแปลกหน้า",
+       example:"หัวหน้างานที่มี CISSP รับรองว่าสมชายดูแล IAM บน Azure จริง 2 ปี ไม่ใช่แค่เขียนในเรซูเม่"},
+      {th:"รักษาสถานะด้วย CPE / AMF", en:"Maintenance",
+       explain:"หลังได้ใบต้องเก็บชั่วโมง CPE ตามรอบและจ่ายค่าบำรุงรักษาปีละครั้ง ไม่ครบอาจถูกระงับใบ",
+       example:"เข้าสัมมนาคลาวด์ 2 วัน นับเป็น CPE ได้ ถ้าบันทึกหลักฐานวันที่ หัวข้อ และชั่วโมง"}
+     ]},
+    {th:"6 โดเมนของข้อสอบ", en:"CCSP domains + weights",
+     explain:"ข้อสอบแบ่ง 6 โดเมนน้ำหนักไม่เท่ากัน โดเมนข้อมูลหนักสุด 20% โดเมนกฎหมายเบาสุด 13% แต่ข้อกฎหมายมักละเอียดเรื่องเขตอำนาจ",
+     example:"ถ้าเหลือเวลาทบทวน 1 สัปดาห์ ควรทุ่ม D2 (ข้อมูล) และ D1/D3/D4 ก่อน เพราะรวมกันกว่า 70%",
+     kids:[
+      {th:"D1 แนวคิด/สถาปัตยกรรม/ออกแบบ 17%", en:"Cloud Concepts, Architecture, and Design",
+       explain:"นิยาม บทบาท ลักษณะคลาวด์ โมเดลบริการ/ติดตั้ง และหลักออกแบบ",
+       example:"ข้อถามว่า ‘rapid elasticity’ คืออะไร — อยู่ในโดเมนนี้"},
+      {th:"D2 ความปลอดภัยข้อมูล 20%", en:"Cloud Data Security",
+       explain:"วงจรชีวิตข้อมูล การเข้ารหัส DLP การจัดชั้น IRM การลบและล็อก",
+       example:"ข้อถามว่าทำไมคลาวด์นิยม crypto-shredding แทนการทับสื่อ — โดเมนนี้"},
+      {th:"D3 แพลตฟอร์มและโครงสร้างพื้นฐาน 17%", en:"Cloud Platform and Infrastructure Security",
+       explain:"ฮาร์ดแวร์ เครือข่าย เสมือนจริง ระนาบบริหาร ความเสี่ยง และ BCDR",
+       example:"ข้อแยก RTO กับ RPO — โดเมนนี้"},
+      {th:"D4 ความปลอดภัยแอปพลิเคชัน 17%", en:"Cloud Application Security",
+       explain:"SDLC, threat modeling, API, IAM, CASB",
+       example:"ข้อถาม SAML ใช้ทำ federation ได้อย่างไร — โดเมนนี้"},
+      {th:"D5 การปฏิบัติการความปลอดภัย 16%", en:"Cloud Security Operations",
+       explain:"เบสไลน์ แพตช์ ITIL นิติวิทยาศาสตร์ SOC",
+       example:"ข้อถามขั้นตอนแรกของการทำ golden image — โดเมนนี้"},
+      {th:"D6 กฎหมาย ความเสี่ยง Compliance 13%", en:"Legal, Risk, and Compliance",
+       explain:"กฎหมายชนกัน ความเป็นส่วนตัว รายงานตรวจ สัญญา",
+       example:"ข้อถามใครเป็น data controller เมื่อใช้ SaaS — โดเมนนี้"}
+     ]},
+    {th:"แนวคิดความปลอดภัยพื้นฐาน", en:"Basic security concepts",
+     explain:"ทุกคอนโทรลในคลาวด์ยังยึด CIA และมักเพิ่ม Privacy เป็นมิติที่สี่ เพราะข้อมูลข้ามประเทศง่าย",
+     example:"เข้ารหัสดิสก์ปกป้อง Confidentiality, แฮชไฟล์ปกป้อง Integrity, มัลติ AZ ปกป้อง Availability, การปิดบังชื่อในล็อกปกป้อง Privacy",
+     kids:[
+      {th:"CIA + Privacy", en:"Confidentiality, Integrity, Availability, Privacy",
+       explain:"ความลับ ความถูกต้อง ความพร้อมใช้ และสิทธิของเจ้าของข้อมูลเป็นคนละเรื่องกับความลับ ข้อมูลสาธารณะก็มีประเด็น Privacy ได้",
+       example:"รายชื่ออีเมลการตลาดไม่เป็นความลับทางทหาร แต่ถ้าส่งไปประมวลผลที่ต่างประเทศโดยไม่แจ้ง ผิดหลัก Privacy"},
+      {th:"AAA", en:"Authentication, Authorization, Accounting",
+       explain:"พิสูจน์ว่าเป็นใคร ให้อนุญาตอะไร และบันทึกว่าทำอะไร เพื่อตรวจสอบย้อนหลัง",
+       example:"ล็อกอินด้วย MFA (AuthN) ได้สิทธิ์อ่านบัคเก็ตเดียว (AuthZ) ทุกการดาวน์โหลดถูกเขียนใน CloudTrail (Accounting)"},
+      {th:"การป้องกันเชิงลึก", en:"Defense in depth",
+       explain:"ไม่พึ่งชั้นเดียว วางหลายชั้นทั้งเครือข่าย โฮสต์ แอป ข้อมูล และคน",
+       example:"WAF + SG + IAM น้อยสุด + เข้ารหัสอ็อบเจ็กต์ + DLP — แม้ชั้นหนึ่งพัง ชั้นอื่นยังกันได้"},
+      {th:"Least privilege / Need to know", en:"Least privilege",
+       explain:"ให้สิทธิ์น้อยที่สุดที่ทำงานได้ และให้เห็นข้อมูลเฉพาะที่จำเป็นต่อหน้าที่",
+       example:"นักพัฒนาได้สิทธิ์ deploy บน staging ไม่ได้ลบโปรดักชัน และไม่เห็นหมายเลขบัตรในล็อก"}
+     ]},
+    {th:"การบริหารความเสี่ยง", en:"Risk management",
+     explain:"ความเสี่ยง = ภัยคุกคาม × ช่องโหว่ × ผลกระทบ ต้องระบุ ประเมิน เลือกวิธีบำบัด แล้วติดตามความเสี่ยงคงเหลือ",
+     example:"ย้าย SAP ไป public cloud — ระบุความเสี่ยงข้อมูลข้ามแดน ประเมินสูง เลือก mitigate ด้วย region ในประเทศ + เข้ารหัส CMK",
+     kids:[
+      {th:"ระบุ ประเมิน บำบัด ติดตาม", en:"Identify → Assess → Treat → Monitor",
+       explain:"เป็นวงจรไม่จบแค่ครั้งเดียว เมื่อระบบหรือกฎหมายเปลี่ยนต้องประเมินใหม่",
+       example:"หลัง GDPR มีผล ทีมความเสี่ยงต้องประเมินระบบ CRM บน SaaS สหรัฐใหม่ทั้งวงจร"},
+      {th:"ยอมรับ หลีกเลี่ยง โอน ลด", en:"Accept / Avoid / Transfer / Mitigate",
+       explain:"Accept = อยู่กับความเสี่ยง Avoid = ไม่ทำกิจกรรม Transfer = ประกัน/สัญญา Mitigate = ลดโอกาสหรือผลกระทบ",
+       example:"ไม่เก็บ CVV เอง (avoid) ซื้อ cyber insurance (transfer) เปิด MFA (mitigate) ยอมรับว่าอาจมี downtime 15 นาทีต่อเดือน (accept)"},
+      {th:"ความเสี่ยงคงเหลือ", en:"Residual risk",
+       explain:"ความเสี่ยงที่เหลือหลังใช้คอนโทรลแล้ว ผู้บริหารต้องยอมรับเป็นลายลักษณ์อักษร",
+       example:"เข้ารหัสแล้วแต่คีย์อยู่ที่ CSP — ยังเหลือความเสี่ยงที่เจ้าหน้าที่ CSP เข้าถึงได้ ต้องให้บอร์ดรับทราบ"}
+     ]},
+    {th:"ความต่อเนื่องทางธุรกิจและกู้ภัยพิบัติ", en:"BCDR",
+     explain:"BCDR มีสามชั้น: ทำให้ระบบทน (resiliency) กู้จากเสียบางส่วนด้วยแบ็กอัป และย้ายไซต์เมื่อภัยพิบัติใหญ่",
+     example:"ดิสก์พังกู้จาก snapshot ใน AZ เดิม = recovery · ไฟไหม้ทั้งรีเจียนต้อง failover ไปรีเจียนสำรอง = disaster recovery",
+     kids:[
+      {th:"ความยืดหยุ่น (Resiliency)", en:"Redundancy",
+       explain:"ซ้ำซ้อนตั้งแต่ไฟ แอร์ คน ไปจนถึงโหนดแอป เพื่อผู้ใช้แทบไม่รู้สึกว่ามีปัญหา",
+       example:"โหลดบาลานซ์ 3 AZ + ฐานข้อมูล Multi-AZ ทำให้ AZ หนึ่งล่มเว็บยังเปิดได้"},
+      {th:"การกู้คืนจากความเสียหายบางส่วน", en:"Restore from backup",
+       example:"แรนซัมแวร์เข้ารหัส VM หนึ่งเครื่อง กู้จาก backup เมื่อคืนภายใน VPC เดิม เสียข้อมูลตาม RPO 1 ชั่วโมง",
+       explain:"สื่อและไซต์ยังใช้ได้ การสูญเสียมาจากไฟล์เสียหรือฮาร์ดแวร์บางชิ้น"},
+      {th:"Disaster Recovery", en:"Catastrophic failover",
+       explain:"ภัยที่ทำให้ไซต์หลักใช้ไม่ได้ต้องมีแผนย้ายล่วงหน้า เพราะแพงและช้า จึงเป็นทางเลือกสุดท้าย",
+       example:"แผ่นดินไหวที่รีเจียนโตเกียว — สลับ DNS ไปรีเจียนโอซาก้าตาม runbook ที่ซ้อมทุกไตรมาส"}
+     ]}
+  ]
+},
+{
+  id:"ch2", ch:"2", color:"ch-2",
+  th:"บทที่ 2 · แนวคิด สถาปัตยกรรม และการออกแบบคลาวด์",
+  en:"Domain 1 — 17%",
+  explain:"วางรากฐานตาม ISO/IEC 17788 และ 17789: บทบาท ลักษณะ 6 ข้อ หมวดบริการ โมเดลติดตั้ง ประเด็นตัดขวาง และวิธีประเมิน CSP",
+  example:"ธนาคารจะย้ายคอร์แบงก์ ต้องเลือก private/hybrid เพราะกฎท้องถิ่น ห้าม public อย่างเดียว แล้วตรวจ SOC 2 Type II ของผู้ให้บริการก่อนเซ็นสัญญา",
+  kids:[
+    {th:"นิยามและบทบาทคลาวด์", en:"Definitions & roles",
+     explain:"คลาวด์คือโมเดลให้ใช้ทรัพยากรร่วมแบบวัดได้ตามต้องการ บทบาทหลักมีลูกค้า ผู้ให้บริการ และพันธมิตร",
+     example:"บริษัทใช้ Salesforce (SaaS) — บริษัทเป็นลูกค้า Salesforce เป็นผู้ให้บริการ พาร์ตเนอร์ที่เขียนแพ็กเกจคัสตอมเป็น Cloud Service Partner",
+     kids:[
+      {th:"ลูกค้าบริการคลาวด์ (CSC)", en:"Cloud Service Customer",
+       explain:"องค์กรหรือบุคคลที่ใช้บริการและยังคงเป็นเจ้าของข้อมูล/ความเสี่ยงทางธุรกิจ",
+       example:"โรงพยาบาลใช้ EHR บนคลาวด์ โรงพยาบาลยังเป็นผู้รับผิดชอบต่อข้อมูลคนไข้"},
+      {th:"ผู้ให้บริการคลาวด์ (CSP)", en:"Cloud Service Provider",
+       explain:"เจ้าของแพลตฟอร์ม ดูแลโครงสร้างตามโมเดลบริการที่ขาย",
+       example:"AWS ดูแลฮาร์ดแวร์และไฮเปอร์ไวเซอร์ของ EC2 แต่ไม่แพตช์ Windows ใน VM ของลูกค้า"},
+      {th:"พันธมิตรบริการคลาวด์", en:"Cloud Service Partner",
+       explain:"ช่วยออกแบบ เชื่อมต่อ ตรวจ หรือขายบริการเสริม ไม่ใช่เจ้าของแพลตฟอร์มหลัก",
+       example:"พาร์ตเนอร์ติดตั้ง CASB และเชื่อม SSO ให้ลูกค้าใช้หลาย SaaS"},
+      {th:"บทบาทย่อยตาม ISO/IEC 17789", en:"Sub-roles",
+       explain:"มีผู้ใช้ ผู้ดูแลระบบ ผู้ตรวจสอบ นายหน้าบริการ ฯลฯ แยกหน้าที่เพื่อลดผลประโยชน์ทับซ้อน",
+       example:"คนที่อนุมัติสิทธิ์ไม่ควรเป็นคนเดียวกับคนที่ตรวจล็อกสิทธิ์"}
+     ]},
+    {th:"ลักษณะสำคัญของคลาวด์", en:"Key characteristics",
+     explain:"ข้อสอบจำ 6 ลักษณะนี้เกือบทุกครั้ง ขาดข้อใดข้อหนึ่งมักไม่นับว่าเป็นคลาวด์แท้",
+     example:"เช่าเซิร์ฟเวอร์รายเดือนแบบต้องเปิดตั๋วถึงจะได้เครื่อง ขาด on-demand self-service จึงเป็น hosting มากกว่าคลาวด์",
+     kids:[
+      {th:"บริการตนเองตามความต้องการ", en:"On-demand self-service",
+       explain:"ผู้ใช้ขอทรัพยากรเองผ่านพอร์ทัล/API โดยไม่ต้องรอเจ้าหน้าที่ผู้ให้บริการทุกครั้ง",
+       example:"กดสร้าง VM ในคอนโซลแล้วได้ใน 2 นาที"},
+      {th:"เข้าถึงผ่านเครือข่ายกว้าง", en:"Broad network access",
+       explain:"ใช้ได้จากอุปกรณ์และเครือข่ายหลากหลาย ไม่ล็อกแค่สายในศูนย์ข้อมูล",
+       example:"พนักงานเปิดแอปจากโน้ตบุ๊ก มือถือ และสำนักงานสาขาผ่านอินเทอร์เน็ต"},
+      {th:"หลายผู้เช่า", en:"Multitenancy",
+       explain:"หลายลูกค้าใช้ทรัพยากรชุดเดียวกันแต่ถูกแยกเชิงตรรกะ ความลับจึงพึ่งการแยกและเข้ารหัสมากกว่ากำแพงกายภาพ",
+       example:"VM สองบริษัทอยู่โฮสต์เดียวกัน แยกด้วยไฮเปอร์ไวเซอร์และ VPC"},
+      {th:"ยืดหยุ่นและขยายตัวเร็ว", en:"Rapid elasticity",
+       explain:"เพิ่ม/ลดทรัพยากรเร็วตามโหลด ทั้งแนวตั้งและแนวนอน",
+       example:"วันโปรโมชันเว็บสเกลจาก 4 เป็น 40 อินสแตนซ์อัตโนมัติ แล้วหดคืนตอนดึก"},
+      {th:"รวมทรัพยากร", en:"Resource pooling",
+       explain:"ผู้ให้บริการรวม CPU หน่วยความจำ จานดิสก์ แล้วจัดสรรใหม่ตามความต้องการ",
+       example:"โฮสต์มี 64 vCPU ถูกแบ่งให้ 20 ลูกค้า ไม่มีใครจองเครื่องกายภาพทั้งเครื่อง"},
+      {th:"วัดการใช้บริการได้", en:"Measured service",
+       explain:"วัดและคิดเงินตามใช้จริง ทำให้ตรวจสอบและตั้งงบได้",
+       example:"ใบแจ้งหนี้แยกค่า compute เก็บข้อมูล และ egress เป็นชั่วโมง/กิกะไบต์"}
+     ]},
+    {th:"เทคโนโลยีฐาน", en:"Building-block technologies",
+     explain:"คลาวด์ตั้งบนเสมือนจริง ที่เก็บ เครือข่าย และระนาบควบคุมที่ทำ API ได้",
+     example:"สร้าง VM = ไฮเปอร์ไวเซอร์จอง CPU/RAM + แนบวอลุม + ต่อ VPC + สั่งผ่าน management plane",
+     kids:[
+      {th:"เสมือนจริง", en:"Virtualization / hypervisor",
+       explain:"แยกเครื่องเสมือนบนฮาร์ดแวร์เดียว Type 1 วิ่งบนฮาร์ดแวร์ตรง Type 2 วิ่งบนโฮสต์ OS",
+       example:"ESXi/KVM เป็น Type 1 ที่คลาวด์ใช้ ส่วน VirtualBox บนโน้ตบุ๊กเป็น Type 2"},
+      {th:"หน่วยเก็บข้อมูล", en:"Storage",
+       explain:"มีทั้งบล็อก อ็อบเจ็กต์ ไฟล์ และฐานข้อมูล การเลือกผิดทำให้เสียทั้งราคาและความทน",
+       example:"รูปโปรไฟล์ล้านไฟล์ควรอยู่ object storage ไม่ใช่ดิสก์บล็อกของ VM"},
+      {th:"เครือข่าย", en:"Networking",
+       explain:"เครือข่ายถูกนิยามเป็นซอฟต์แวร์ (SDN) แยกด้วย VPC, subnet, NSG",
+       example:"สร้าง subnet ส่วนตัวไม่มี IP สาธารณะ ให้ออกเน็ตผ่าน NAT gateway"},
+      {th:"โครงสร้างควบคุม", en:"Control infrastructure",
+       explain:"API และคอนโซลที่สั่งทุกอย่าง ถ้าถูกยึดเท่ากับยึดทั้งสภาพแวดล้อม",
+       example:"คีย์ root ของคลาวด์รั่ว = ผู้โจมตีลบทุกทรัพยากรได้แม้ VM ยังแพตช์ครบ"}
+     ]},
+    {th:"สถาปัตยกรรมอ้างอิง", en:"Cloud reference architecture",
+     explain:"กรอบที่อธิบายกิจกรรม ความสามารถ หมวดบริการ โมเดลติดตั้ง และเรื่องตัดขวางอย่าง SLA กับ portability",
+     example:"เวลาเขียนนโยบายคลาวด์องค์กร ใช้กรอบนี้เป็นสารบัญว่าต้องครอบคลุมอะไรบ้าง",
+     kids:[
+      {th:"กิจกรรมคลาวด์", en:"Cloud computing activities",
+       explain:"ครอบคลุมการเตรียม จัดส่ง ใช้ ดูแล และเลิกใช้บริการ ทั้งฝั่งลูกค้าและผู้ให้",
+       example:"กิจกรรมของลูกค้าคือเลือกบริการ ตั้งคอนฟิก เฝ้าใช้งาน กิจกรรมของผู้ให้คือ provision และบำรุงโครงสร้าง"},
+      {th:"ความสามารถของบริการ", en:"Service capabilities",
+       explain:"แยกเป็นความสามารถด้านแอป แพลตฟอร์ม และโครงสร้าง ไม่ใช่ชื่อทางการค้า",
+       example:"Lambda เป็น compute แบบแพลตฟอร์ม ส่วน EC2 เป็นความสามารถโครงสร้าง"},
+      {th:"หมวดบริการ IaaS PaaS SaaS", en:"Service categories",
+       explain:"IaaS ให้เครื่อง/เครือข่าย/ที่เก็บ PaaS ให้รันไทม์ SaaS ให้แอปสำเร็จ ผู้ใช้รับผิดชอบต่างกัน",
+       example:"EC2 = IaaS, Elastic Beanstalk/App Service = PaaS, Microsoft 365 = SaaS"},
+      {th:"โมเดลการติดตั้ง", en:"Deployment models",
+       explain:"Public ใช้ร่วม Private ใช้หน่วยงานเดียว Community ใช้กลุ่มที่มีข้อกังวลร่วม Hybrid ผสม",
+       example:"ธนาคารเก็บข้อมูลลูกค้าใน private cloud และใช้ public cloud รันเว็บโฆษณา แล้วเชื่อมด้วย VPN = hybrid"},
+      {th:"ประเด็นร่วมทุกโมเดล", en:"Cross-cutting aspects",
+       explain:"interoperability, portability, reversibility, availability, security, privacy, resiliency, performance, governance, SLA, auditability, regulation",
+       example:"reversibility = ย้ายออกได้จริง ถ้ารูปแบบข้อมูลล็อกอยู่กับ API ผู้ขายรายเดียว จะย้ายออกยาก (vendor lock-in)"}
+     ]},
+    {th:"เทคโนโลยีที่เกี่ยวข้อง", en:"Related technologies",
+     explain:"AI, บล็อกเชน, คอนเทนเนอร์, ควอนตัม, DevOps เปลี่ยนผิวการโจมตีและวิธีคุม",
+     example:"ย้ายจาก VM เป็น Kubernetes ต้องเพิ่มการสแกนอิมเมจและล็อก RBAC ของคลัสเตอร์",
+     kids:[
+      {th:"AI / Machine Learning", en:"AI/ML",
+       explain:"โมเดลกินข้อมูลฝึกจำนวนมาก จึงเสี่ยงข้อมูลรั่วในชุดฝึกและคำตอบที่ถูกชักนำ",
+       example:"แชทบอทภายในถูกป้อนไฟล์เงินเดือนในชุดฝึก พนักงานถามแล้วได้ตัวเลขออกมา"},
+      {th:"บล็อกเชน", en:"Blockchain",
+       explain:"บัญชีแยกประเภทกระจาย แก้ข้อมูลย้อนหลังยาก ดีต่อความถูกต้อง แต่ลบข้อมูลตามสิทธิ์ถูกลืมยาก",
+       example:"ใส่ PII ลงเชนสาธารณะแล้วขอสิทธิ์ถูกลืมตาม GDPR ไม่ได้ เพราะแก้บล็อกเก่าไม่ได้"},
+      {th:"คอนเทนเนอร์", en:"Containers",
+       explain:"แพ็กแอปกับไลบรารี ใช้เคอร์เนลร่วมโฮสต์ เบาแต่แยกน้อยกว่า VM",
+       example:"อิมเมจมีไลบรารีเก่าถูกรันเป็น 200 พ็อด = ช่องโหว่เดียวกันสองร้อยจุด"},
+      {th:"ควอนตัมคอมพิวติ้ง", en:"Quantum computing",
+       explain:"อนาคตอาจทำลายอัลกอริทึมคีย์สาธารณะบางแบบ จึงเริ่มวางแผน crypto agility",
+       example:"เลือกไลบรารีที่สลับอัลกอริทึมได้ ไม่ฝัง RSA แข็งในเฟิร์มแวร์"},
+      {th:"DevOps / DevSecOps", en:"DevOps security",
+       explain:"ส่งของเร็วด้วยไปป์ไลน์ ต้องแทรกความปลอดภัยใน CI/CD ไม่รอตรวจตอนท้าย",
+       example:"ทุกพูลรีเควสต้องผ่าน SAST + สแกน dependency ก่อน merge"}
+     ]},
+    {th:"แนวคิดความปลอดภัยที่เกี่ยวกับคลาวด์", en:"Cloud security concepts",
+     explain:"หลักเดิมยังใช้ได้แต่เน้นหนักขึ้นที่เข้ารหัส การทำลายข้อมูลโดยไม่มีสื่อจริง และไฮเปอร์ไวเซอร์",
+     example:"เลิกสัญญา IaaS ไม่ได้เดินไปทุบฮาร์ดดิสก์ ต้องพึ่ง crypto-shredding และการรับรองจาก CSP",
+     kids:[
+      {th:"วิทยาการเข้ารหัส", en:"Cryptography",
+       explain:"แยกผู้เช่าด้วยคีย์ได้แม้จานดิสก์ร่วมกัน ต้องบริหารคีย์ให้ลูกค้าควบคุมได้เมื่อข้อมูลอ่อนไหว",
+       example:"เปิด CMK ใน KMS แล้วบังคับว่า S3 รับเฉพาะอ็อบเจ็กต์ที่เข้ารหัสด้วยคีย์นี้"},
+      {th:"การควบคุมตัวตนและสิทธิ์", en:"Identity and access control",
+       explain:"ตัวตนกลายเป็นเส้นขอบเขตใหม่ แทนไฟร์วอลล์รอบศูนย์ข้อมูล",
+       example:"ห้ามใช้คีย์ถาวรของยูสเซอร์ สั่งให้แอปใช้ role ชั่วคราว"},
+      {th:"การทำลายข้อมูล/สื่อ", en:"Data and media sanitization",
+       explain:"ลูกค้าไม่ได้ถือจานจริง การทับสื่อแบบดั้งเดิมทำไม่ได้ ใช้การลบคีย์และการรับรองการลบจากผู้ให้",
+       example:"เลิกโปรเจกต์แล้วทำลายคีย์ CMK ทำให้สำเนาที่เหลืออ่านไม่ได้"},
+      {th:"ความปลอดภัยเครือข่าย", en:"Network security",
+       explain:"ใช้ SG/NSG, WAF, microsegmentation แทนการพึ่งเส้นรอบนอกเส้นเดียว",
+       example:"ฐานข้อมูลไม่มี public IP รับได้เฉพาะ SG ของชั้นแอป"},
+      {th:"ความปลอดภัยของเสมือนจริง", en:"Hypervisor & container security",
+       explain:"ถ้าไฮเปอร์ไวเซอร์พัง ผู้เช่าอาจเห็นกันได้ (VM escape)",
+       example:"แพตช์ไฮเปอร์ไวเซอร์ภายในหน้าต่างบำรุงที่ SLA กำหนด และห้าม nested virt ที่ไม่จำเป็น"},
+      {th:"ภัยคุกคามทั่วไป / OWASP", en:"Common threats",
+       explain:"ยังเจอ injection, broken access, ตั้งค่าผิด รวมถึงช่องโหว่เฉพาะคลาวด์อย่าง metadata service",
+       example:"SSR จากแอปดึง IMDS ได้คีย์ชั่วคราวของอินสแตนซ์"},
+      {th:"สุขอนามัยด้านความปลอดภัย", en:"Security hygiene",
+       explain:"งานพื้นฐานที่มักพลาด: แพตช์ ปิดพอร์ต หมุนคีย์ ลบทรัพยากรกำพร้า",
+       example:"สแกนรายเดือนพบบัคเก็ต public ที่ไม่มีเจ้าของจากโปรเจกต์ปีที่แล้ว"}
+     ]},
+    {th:"หลักออกแบบคลาวด์ที่ปลอดภัย", en:"Secure design principles",
+     explain:"ออกแบบตั้งแต่ข้อมูล BCDR ความเข้ากันได้ และการไม่ติดผู้ขาย ก่อนเลือกสีของบริการ",
+     example:"ทีมการเงินเลือก SaaS เพราะถูก แต่ API ส่งออกไม่ได้ทั้งก้อน — ติดล็อกก่อนย้ายวันแรก",
+     kids:[
+      {th:"วงจรชีวิตข้อมูลที่ปลอดภัย", en:"Secure data lifecycle",
+       explain:"วางคอนโทรลทุกเฟสตั้งแต่สร้างจนทำลาย ไม่ใช่แค่ตอนเก็บ",
+       example:"ไฟล์ถูกสร้างในแอป เก็บแบบเข้ารหัส แชร์ผ่านลิงก์หมดอายุ แล้วทำลายคีย์เมื่อครบ 7 ปี"},
+      {th:"BCDR บนคลาวด์", en:"Cloud-based BC/DR",
+       explain:"ใช้คลาวด์เป็นไซต์สำรองหรือเป็นระบบหลักที่กระจายหลายรีเจียน แต่ต้องคิดเรื่องข้อมูลข้ามแดน",
+       example:"ใช้รีเจียนสำรองในประเทศเดียวกันเพื่อไม่ให้สำเนาหลุดนอกเขตอำนาจ"},
+      {th:"วิเคราะห์ผลกระทบทางธุรกิจ", en:"BIA",
+       explain:"หาว่ากระบวนการใดสำคัญ หยุดได้กี่ชั่วโมง เสียข้อมูลได้เท่าไร ก่อนตั้ง RTO/RPO",
+       example:"ระบบชำระเงินหยุด 1 ชม. เสียรายได้ 12 ล้าน จึงตั้ง RTO 15 นาที"},
+      {th:"ความต้องการเชิงหน้าที่", en:"Functional security requirements",
+       explain:"interoperability, portability, vendor lock-in ต้องถูกเขียนในสัญญาและสถาปัตยกรรม",
+       example:"บังคับให้ส่งออกข้อมูลเป็น CSV/JSON มาตรฐาน ไม่ใช่ไฟล์โปรไพรเอทารีอย่างเดียว"},
+      {th:"ความปลอดภัยตามหมวดบริการ", en:"By service category",
+       explain:"IaaS ลูกค้า harden OS เอง PaaS คุมแอป/ข้อมูล SaaS คุมบัญชี การตั้งค่า และข้อมูล",
+       example:"บน SaaS อีเมล ลูกค้าเปิด MFA และ DLP ได้ แต่แพตช์เซิร์ฟเวอร์เมลไม่ใช่งานลูกค้า"},
+      {th:"แพตเทิร์นการออกแบบ", en:"Cloud design patterns",
+       explain:"แบบที่พิสูจน์แล้ว เช่น แยกบัญชีตามสภาพแวดล้อม คาดเข็มขัดรอบ management plane",
+       example:"บัญชี prod แยกจาก dev ไม่ใช้ VPC ร่วม และบังคับ SCP ห้ามปิด CloudTrail"},
+      {th:"ความปลอดภัย DevOps", en:"DevOps security",
+       explain:"ใส่การตรวจในไปป์ไลน์และใช้ IaC เพื่อให้คอนฟิกซ้ำได้และตรวจได้",
+       example:"Terraform plan ต้องผ่านนโยบาย ‘ห้าม SG 0.0.0.0/0 ถึงพอร์ต 22’"}
+     ]},
+    {th:"ประเมินผู้ให้บริการ", en:"Evaluate CSPs",
+     explain:"ลูกค้าตรวจผู้ให้ผ่านมาตรฐานอิสระเพราะเข้าไม่ถึงศูนย์ข้อมูลเอง",
+     example:"ขอ SOC 2 Type II ปีล่าสุด บวก CSA STAR และแผน BCDR ก่อนขึ้น shortlist",
+     kids:[
+      {th:"ตรวจกับเกณฑ์มาตรฐาน", en:"Verification against criteria",
+       explain:"เทียบกับ ISO 27001, CSA CCM, FedRAMP, PCI ฯลฯ ตามประเภทข้อมูล",
+       example:"ระบบรับบัตรต้องเห็นว่าผู้ให้มี PCI DSS ระดับที่ตรงขอบเขต"},
+      {th:"Common Criteria", en:"Product certifications",
+       explain:"มาตรฐานสากลประเมินความปลอดภัยของผลิตภัณฑ์/ระบบตาม EAL",
+       example:"ไฟร์วอลล์ฮาร์ดแวร์ในศูนย์ผู้ให้ผ่าน Common Criteria EAL4+"},
+      {th:"FIPS 140-2/140-3", en:"Cryptographic module validation",
+       explain:"รับรองโมดูลเข้ารหัส ไม่ได้รับรองแอปทั้งก้อน",
+       example:"งานราชการสหรัฐบังคับใช้ HSM ที่ผ่าน FIPS 140-2 ระดับ 3"}
+     ]}
+  ]
+},
+{
+  id:"ch3", ch:"3", color:"ch-3",
+  th:"บทที่ 3 · ความปลอดภัยของข้อมูลบนคลาวด์",
+  en:"Domain 2 — 20%",
+  explain:"โดเมนหนักสุด ต้องรู้ว่าข้อมูลเกิด ถูกเก็บ ถูกใช้ ถูกแชร์ ถูกเก็บถาวร และถูกทำลายอย่างไร พร้อมเทคโนโลยีปกป้องและการพิสูจน์เหตุการณ์",
+  example:"แอปชำระเงินบนคลาวด์: PAN ถูกโทเค็น, ข้อมูลนิ่งเข้ารหัส CMK, DLP กันส่งออก, ล็อกทุกการเข้าถึง, เมื่อเลิกใช้ทำลายคีย์",
+  kids:[
+    {th:"แนวคิดข้อมูลคลาวด์", en:"Cloud data concepts",
+     explain:"ข้อมูลไม่ได้อยู่ที่เดียว มีสำเนาและกระแสข้ามบริการ การออกแบบต้องตามข้อมูล ไม่ตามเซิร์ฟเวอร์",
+     example:"ไฟล์อัปขึ้น S3 ถูกทำสำเนา 3 AZ และมีสำเนาในรีเจียนสำรอง — นโยบายลบต้องลบครบทุกสำเนา",
+     kids:[
+      {th:"เฟสวงจรชีวิตข้อมูล", en:"Create Store Use Share Archive Destroy",
+       explain:"Create สร้าง Store เก็บ Use ประมวลผล Share ส่งต่อ Archive เก็บยาว Destroy ทำลาย คอนโทรลต่างกันแต่ละเฟส",
+       example:"ตอน Share ใช้ลิงก์หมดอายุ + IRM ห้ามพิมพ์ ตอน Destroy ใช้ crypto-shredding"},
+      {th:"การกระจายข้อมูล", en:"Data dispersion",
+       explain:"กระจายชิ้นส่วนไปหลายโหนดเพื่อทนทาน แต่เพิ่มผิวการโจมตีและปัญหาเขตอำนาจ",
+       example:"อ็อบเจ็กต์ถูก erasure coding ข้าม 3 AZ — ดีต่อ Availability แต่ต้องรู้ว่าชิ้นส่วนไม่ออกนอกรีเจียนที่อนุญาต"},
+      {th:"กระแสข้อมูล", en:"Data flows",
+       explain:"แผนที่ว่าข้อมูลไหลจากใคร ไปไหน ผ่านบริการใด เพื่อตั้งคอนโทรลบนเส้นทาง",
+       example:"แอปมือถือ → API Gateway → Lambda → RDS → สำเนาไปเครื่องมือวิเคราะห์ต่างประเทศ"}
+     ]},
+    {th:"สถาปัตยกรรมที่เก็บข้อมูล", en:"Storage architectures",
+     explain:"ชนิดที่เก็บผูกกับโมเดลบริการ ภัยก็ต่างกัน",
+     example:"ใส่ฐานข้อมูลไว้ในอ็อบเจ็กต์สตอเรจแล้วคิวรีทีละไฟล์ = ออกแบบผิดชนิด",
+     kids:[
+      {th:"Volume / Object (IaaS)", en:"Block vs object",
+       explain:"Volume คือจานของ VM ใช้กับ OS/DB Object คืออ็อบเจ็กต์มี metadata เข้าถึงผ่าน API",
+       example:"ดิสก์ C: ของ Windows = volume, ไฟล์วิดีโอในบัคเก็ต = object"},
+      {th:"Structured / Unstructured (PaaS)", en:"PaaS data types",
+       explain:"Structured อยู่ในตาราง/สคีมา Unstructured เป็นไฟล์ รูป ล็อก ข้อความ",
+       example:"ตารางลูกค้าใน Cloud SQL = structured, PDF สัญญาในไฟล์แชร์ = unstructured"},
+      {th:"Information & content storage (SaaS)", en:"SaaS storage",
+       explain:"ผู้ให้บริการจัดการที่เก็บ ลูกค้าคุมเนื้อหา สิทธิ์ และการแชร์ในแอป",
+       example:"ไฟล์ใน Google Drive / SharePoint — ลูกค้าตั้งลิงก์แชร์ผิดแล้วข้อมูลหลุด"},
+      {th:"Ephemeral vs long-term", en:"ชั่วคราว vs ระยะยาว",
+       explain:"Ephemeral หายเมื่ออินสแตนซ์ดับ อย่าเก็บของมีค่า Long-term ต้องมี redundancy และนโยบายเก็บ",
+       example:"ไฟล์ชั่วคราวบน instance store หายหลังรีสตาร์ท งานสำคัญต้องอยู่ EBS/S3"},
+      {th:"ภัยต่อแต่ละประเภทที่เก็บ", en:"Threats to storage",
+       explain:"volume ถูกสแนปช็อตแล้วแชร์ผิด object ถูกตั้ง public SaaS ถูกแชร์ลิงก์กว้าง",
+       example:"สแนปช็อตดิสก์ที่มีคีย์ในไฟล์คอนฟิกถูกแชร์ข้ามบัญชี"}
+     ]},
+    {th:"เทคโนโลยีและกลยุทธ์ปกป้องข้อมูล", en:"Data security technologies",
+     explain:"เลือกเครื่องมือตามเป้าหมาย: ความลับใช้เข้ารหัส ความสมบูรณ์ใช้แฮช ลดขอบเขต PCI ใช้โทเค็น",
+     example:"ร้านค้าออนไลน์เก็บโทเค็นแทนเลขบัตร ทั้งฐานข้อมูลหลุดก็ยังไม่ครบข้อมูลบัตร",
+     kids:[
+      {th:"การเข้ารหัส", en:"Encryption",
+       explain:"ที่พัก (at rest) ระหว่างทาง (in transit) และบางกรณีตอนประมวลผล (in use) อัลกอริทึมอย่างเดียวไม่พอ ต้องคุมคีย์",
+       example:"TLS 1.2+ ตอนโอน และ AES-256 ตอนพักใน S3"},
+      {th:"แฮช", en:"Hashing",
+       explain:"ฟังก์ชันทางเดียวใช้ตรวจว่าไฟล์ถูกแก้ ไม่ใช้เก็บความลับของข้อมูลต้น",
+       example:"เก็บ SHA-256 ของอ็อบเจ็กต์หลายสำเนา ถ้าแฮชไม่ตรงแสดงว่าสำเนาเสียหรือถูกแก้"},
+      {th:"บริหารกุญแจ", en:"Key management",
+       explain:"ใครถือคีย์ถือการเข้าถึง แยกคีย์ตามชั้นข้อมูล หมุนคีย์ และใช้ HSM เมื่อจำเป็น",
+       example:"คีย์ข้อมูลบัตรอยู่ HSM ของลูกค้า คีย์ล็อกทั่วไปอยู่ KMS ของ CSP"},
+      {th:"โทเค็นไนเซชัน", en:"Tokenization",
+       explain:"แทนค่าจริงด้วยโทเค็นที่ไม่มีความหมายนอกระบบแมป ต่างจากเข้ารหัสตรงที่ถอดด้วยคณิตศาสตร์อย่างเดียวไม่ได้",
+       example:"4111-11xx กลายเป็น tok_9f3a ในฐานข้อมูลร้าน ระบบชำระเงินเท่านั้นที่แมปกลับได้"},
+      {th:"ป้องกันการรั่วไหลของข้อมูล", en:"DLP",
+       explain:"ตรวจเนื้อหาที่ออกนอกขอบเขต ทั้งอีเมล อัปโหลด และแชร์ลิงก์",
+       example:"พนักงานพยายามส่งไฟล์ที่มีเลขประจำตัว 13 หลักทางเมลส่วนตัว ระบบ DLP บล็อก"},
+      {th:"ลดการระบุตัวตน", en:"De-identification",
+       explain:"มาสก์ ทำให้ไม่ระบุตัว หรือทำให้ไม่ระบุตัวแบบย้อนกลับไม่ได้ ตามระดับความเสี่ยง",
+       example:"ชุดข้อมูลวิเคราะห์แสดงแค่จังหวัดและช่วงอายุ ไม่โชว์ชื่อและที่อยู่"},
+      {th:"เทคโนโลยีเกิดใหม่", en:"Homomorphic encryption",
+       explain:"ประมวลผลได้โดยไม่ถอดรหัสเต็ม ยังไม่แพร่หลายทุกงานแต่ข้อสอบเอ่ยถึง",
+       example:"ผู้ให้วิเคราะห์เครดิตคำนวณคะแนนจากข้อมูลที่ยังเข้ารหัสอยู่"}
+     ]},
+    {th:"ค้นพบข้อมูล", en:"Data discovery",
+     explain:"หาว่ามีข้อมูลอะไร อยู่ที่ไหน ใครเป็นเจ้าของ ก่อนจะจัดชั้นและใส่คอนโทรล ในคลาวด์ยากกว่าเพราะสำเนากระจาย",
+     example:"สแกนทุกบัคเก็ตพบไฟล์ Excel มีคอลัมน์ ‘national_id’ ที่ทีมมาร์เก็ตติ้งสร้างเอง",
+     kids:[
+      {th:"ข้อมูลมีโครงสร้าง / ไม่มีโครงสร้าง", en:"Structured vs unstructured",
+       explain:"ตารางค้นง่ายด้วยสคีมา ไฟล์กับอีเมลต้องใช้เครื่องมือเนื้อหา",
+       example:"ค้นคำว่า ‘passport’ ในอ็อบเจ็กต์สตอเรจด้วยบริการ discovery"},
+      {th:"บทบาทความเป็นส่วนตัว", en:"Privacy roles",
+       explain:"กำหนดผู้ควบคุม ผู้ประมวลผล เจ้าของข้อมูล และเจ้าหน้าที่คุ้มครองข้อมูล",
+       example:"บริษัทไทยใช้ CRM สหรัฐ — บริษัทไทยเป็นผู้ควบคุม CRM เป็นผู้ประมวลผล"},
+      {th:"จัดชั้นข้อมูลที่พบ", en:"Classify discovered data",
+       explain:"ติดชั้นตามความอ่อนไหวและกฎหมายที่ใช้ ไม่ใช่ตามความรู้สึกทีมเดียว",
+       example:"พบ PHI ในบัคเก็ต dev ต้องยกระดับเป็น Restricted ทันที"},
+      {th:"จับคู่และใช้คอนโทรล", en:"Map and apply controls",
+       explain:"แต่ละชั้นมีคอนโทรลบังคับ เช่น Restricted ต้องเข้ารหัส + MFA + ห้าม public",
+       example:"นโยบายบังคับว่าป้าย Confidential ห้ามออกเน็ตโดยไม่มี DLP"}
+     ]},
+    {th:"จัดชั้นข้อมูล", en:"Data classification",
+     explain:"mapping คือกำหนดกฎ labeling คือติดป้ายบนวัตถุ แล้วใช้ป้ายบังคับคอนโทรลอัตโนมัติ",
+     example:"เมื่อบันทึกไฟล์ใน SharePoint ถ้ามีเลขบัตร ระบบติดป้าย PCI และล็อกการดาวน์โหลด",
+     kids:[
+      {th:"การจับคู่และติดป้าย", en:"Mapping & labeling",
+       explain:"แมปจากชนิดข้อมูล/กฎหมายไปสู่ป้าย แล้วติดทั้งคู่มือและอัตโนมัติ",
+       example:"ฟิลด์ email+location ของลูกค้า EU ถูกแมปเป็นป้าย GDPR-Restricted"},
+      {th:"ข้อมูลอ่อนไหว PII / PHI", en:"PII / PHI",
+       explain:"PII ระบุบุคคลได้ PHI เป็นข้อมูลสุขภาพซึ่งมักเข้มกว่า ต้องดูเขตอำนาจ",
+       example:"ผลแล็บคนไข้ในระบบคลาวด์ = PHI ต้องรักษามาตรฐานสุขภาพท้องถิ่นแม้โฮสต์อยู่ต่างประเทศ"}
+     ]},
+    {th:"Information Rights Management", en:"IRM",
+     explain:"IRM ติดนโยบายไปกับไฟล์เอง แม้ถูกดาวน์โหลดออกไปยังเปิด พิมพ์ ส่งต่อตามสิทธิ์ได้ DRM เน้นสื่อผู้บริโภค",
+     example:"ไฟล์งบประมาณเปิดได้แค่ 7 วัน ห้ามพิมพ์ และถอนสิทธิ์ได้แม้ไฟล์อยู่โน้ตบุ๊กพนักงาน",
+     kids:[
+      {th:"วัตถุประสงค์สิทธิ์ข้อมูล", en:"Rights objectives",
+       explain:"กำหนดใครดูได้ หมดอายุเมื่อไร ตรวจได้หรือไม่ ถอนสิทธิ์ได้หรือไม่",
+       example:"ที่ปรึกษาภายนอกอ่านได้แต่คัดลอกไม่ได้ และสิทธิ์หมดเมื่อสัญญาจบ"},
+      {th:"เครื่องมือ IRM", en:"IRM tools",
+       explain:"ทำงานเหนือ ACL ของไฟล์ระบบ เพราะสิทธิ์เดินทางกับเอกสาร",
+       example:"Microsoft Purview / ระบบ IRM องค์กรเข้ารหัสเอกสารและตรวจสิทธิ์ทุกครั้งที่เปิด"}
+     ]},
+    {th:"เก็บรักษา ลบ และเก็บถาวร", en:"Retention, deletion, archiving",
+     explain:"เก็บสั้นไปผิดกฎหมาย เก็บยาวไปเพิ่มความเสี่ยง ลบต้องลบทุกสำเนา เก็บถาวรต้องอ่านได้ครบระยะ",
+     example:"ล็อกการเงินเก็บ 7 ปีตามกฎหมาย แล้วทำลายคีย์หลังพ้นระยะ ยกเว้นรายการที่ติด Legal Hold",
+     kids:[
+      {th:"นโยบายเก็บรักษา", en:"Retention policies",
+       explain:"กำหนดต่อชนิดข้อมูลและกฎหมาย ไม่ใช้ระยะเดียวทั้งองค์กร",
+       example:"ล็อกระบบ 1 ปี ประวัติการแพทย์ 10 ปี อีเมลทั่วไป 3 ปี"},
+      {th:"วิธีลบอย่างปลอดภัย", en:"Secure deletion",
+       explain:"ในคลาวด์ใช้ crypto-shredding และการยืนยันจากผู้ให้ มากกว่าการทับจานด้วยตนเอง",
+       example:"ลบ CMK ที่มีกำหนดรอ 30 วัน แล้วบันทึกใบรับรองการลบจาก CSP"},
+      {th:"ขั้นตอนเก็บถาวร", en:"Archiving",
+       explain:"ย้ายไปชั้นถูกกว่าแต่ต้องคงความลับ ความถูกต้อง และอ่านได้เมื่อถูกเรียก",
+       example:"เอกสารปี 2018 อยู่ Glacier เข้ารหัส ทดสอบกู้ทุกปีว่ายังเปิดได้"},
+      {th:"Legal Hold", en:"Legal hold",
+       explain:"สั่งระงับการลบ/แก้ไขเมื่อมีคดีหรือสอบสวน แม้ครบอายุเก็บแล้ว",
+       example:"ศาลขอเมลของแผนกขาย ระบบยึดเมลชุดนั้นไม่ให้ retention job ลบ"}
+     ]},
+    {th:"ตรวจสอบ ติดตาม และรับผิดชอบเหตุการณ์ข้อมูล", en:"Data event auditability",
+     explain:"ต้องรู้ว่าใครทำอะไรกับข้อมูลเมื่อไร เก็บล็อกครบ ป้องกันแก้ล็อก และผูกตัวตนผู้กระทำ",
+     example:"สอบสวนไฟล์หลุด ใช้ล็อกที่ผูกกับบัญชี SSO เพื่อพิสูจน์ว่ายูสเซอร์คนใดแชร์ลิงก์",
+     kids:[
+      {th:"แหล่งเหตุการณ์", en:"Event sources",
+       explain:"แอป ฐานข้อมูล ที่เก็บ เครือข่าย IAM และระนาบบริหาร ล้วนเป็นแหล่ง",
+       example:"CloudTrail + ล็อก S3 access + ล็อกแอป ถูกส่งเข้า SIEM"},
+      {th:"การระบุตัวตนผู้กระทำ", en:"Identity attribution",
+       explain:"ล็อกที่บอกแค่ IP โดยไม่มียูสเซอร์ใช้สอบสวนยาก ต้องผูกกับตัวตนจริง",
+       example:"ห้ามใช้บัญชีแชร์ admin เพราะจะไม่รู้ว่าใครลบตาราง"},
+      {th:"บันทึกเหตุการณ์ข้อมูล", en:"Data event logging",
+       explain:"บันทึกอ่าน เขียน ลบ ส่งออก เปลี่ยนสิทธิ์ ตามระดับชั้นข้อมูลและกฎหมาย",
+       example:"ทุกการดาวน์โหลดรายชื่อคนไข้ถูกบันทึกเหตุผลและรหัสผู้ใช้"},
+      {th:"เก็บและวิเคราะห์", en:"Storage and analysis",
+       explain:"รวมศูนย์ ตั้งเวลาเก็บ ใช้ SIEM/UEBA หาพฤติกรรมผิดปกติ",
+       example:"แจ้งเตือนเมื่อบัญชีเดียวดาวน์โหลด 10,000 ไฟล์นอกเวลา"},
+      {th:"ลูกโซ่การครอบครอง + Nonrepudiation", en:"Chain of custody & nonrepudiation",
+       explain:"พิสูจน์ว่าหลักฐานไม่ถูกแก้ และผู้กระทำเถียงไม่ได้ว่าไม่ได้ทำ มักใช้แฮชและลายเซ็นดิจิทัล",
+       example:"ส่งออกล็อกเป็นไฟล์ที่แฮช SHA-256 และลงนาม ก่อนส่งให้ทนาย"}
+     ]}
+  ]
+},
+{
+  id:"ch4", ch:"4", color:"ch-4",
+  th:"บทที่ 4 · ความปลอดภัยของแพลตฟอร์มและโครงสร้างพื้นฐาน",
+  en:"Domain 3 — 17%",
+  explain:"มองชิ้นส่วนศูนย์ข้อมูลคลาวด์ ความเสี่ยงเสมือนจริง คอนโทรล และแผน BCDR ที่ใช้คลาวด์เป็นเครื่องมือ",
+  example:"ก่อนย้าย ERP ไป IaaS ต้องดูว่า management plane แยกบัญชีอย่างไร โฮสต์อยู่รีเจียนใด และ RTO ของฐานข้อมูลทำได้จริงหรือไม่",
+  kids:[
+    {th:"ส่วนประกอบโครงสร้างและแพลตฟอร์ม", en:"Infrastructure components",
+     explain:"ประกอบด้วยกายภาพ เครือข่าย คอมพิวท์ ที่เก็บ เสมือนจริง และระนาบบริหาร",
+     example:"เหตุการณ์ล่มทั้งโซนมักไม่ใช่แอปพัง แต่เป็นเครือข่ายหรือระนาบบริหารในโซนนั้นมีปัญหา",
+     kids:[
+      {th:"ฮาร์ดแวร์และสภาพแวดล้อมกายภาพ", en:"Physical hardware and environment",
+       explain:"ลูกค้า public cloud แทบไม่จับฮาร์ดแวร์ ต้องพึ่งการรับรองศูนย์ข้อมูลของผู้ให้",
+       example:"ขอหลักฐานว่าศูนย์มีเครื่องกำเนิดไฟ N+1 และควบคุมเข้าห้องเคจ"},
+      {th:"เครือข่าย", en:"Networking",
+       explain:"ออกแบบ VPC, peering, เส้นทางออกอินเทอร์เน็ต และการแยกชั้น",
+       example:"ชั้นเว็บมี NAT ออกได้ ชั้นข้อมูลไม่มีเส้นทางอินเทอร์เน็ต"},
+      {th:"หน่วยประมวลผล", en:"Computing",
+       explain:"VM, แบร์เมทัล, ฟังก์ชัน ต่างกันที่ระดับแยกและแพตช์",
+       example:"งานที่ต้องใบรับรองฮาร์ดแวร์เฉพาะเลือกแบร์เมทัล งานburst เลือกฟังก์ชัน"},
+      {th:"ที่เก็บข้อมูล", en:"Storage",
+       explain:"ต้องดู IOPS, ความคงทน, การเข้ารหัส และการจำลองข้ามโซน",
+       example:"ฐานข้อมูลโปรดักชันใช้ดิสก์ซ้ำซ้อนข้าม AZ ไม่ใช้ดิสก์ชั่วคราว"},
+      {th:"เสมือนจริง", en:"Virtualization",
+       explain:"ไฮเปอร์ไวเซอร์แยกผู้เช่า จุดอ่อนอยู่ที่แพตช์และการตั้งค่าผิด",
+       example:"ปิดการคัดลอกเมมโมรีระหว่าง VM ที่ไม่จำเป็น"},
+      {th:"ระนาบบริหารจัดการ", en:"Management plane",
+       explain:"API/คอนโซลที่สั่งทุกอย่าง ต้องเข้มเรื่องตัวตน บันทึก และแยกเครือข่ายบริหาร",
+       example:"บังคับว่าการลบ VPC ต้องผ่าน MFA + การอนุมัติสองคน"}
+     ]},
+    {th:"ออกแบบศูนย์ข้อมูลที่ปลอดภัย", en:"Secure data center design",
+     explain:"ออกแบบทั้งตรรกะ กายภาพ สิ่งแวดล้อม และความยืดหยุ่น ไม่ใช่แค่ซื้อไฟร์วอลล์",
+     example:"ศูนย์ใหม่มีสองเส้นไฟจากคนละสถานี และห้องเย็นสำรอง",
+     kids:[
+      {th:"ออกแบบเชิงตรรกะ", en:"Logical design",
+       explain:"แบ่งโซนความเชื่อถือ แยกผู้เช่า แยก prod/non-prod",
+       example:"บัญชี prod ห้าม peer ตรงกับบัญชีทดสอบ"},
+      {th:"ออกแบบเชิงกายภาพ", en:"Physical design",
+       explain:"ทางเข้า กล้อง เคจ ระยะห่างชั้นวาง และการแยกอุปกรณ์เครือข่าย",
+       example:"ห้อง meet-me ของผู้ให้บริการสื่อสารแยกจากห้องเซิร์ฟเวอร์ลูกค้า"},
+      {th:"ออกแบบสิ่งแวดล้อม", en:"Environmental design",
+       explain:"ไฟ แอร์ น้ำ ดับเพลิง ต้องมีสำรองและทดสอบ",
+       example:"ทดสอบเครื่องกำเนิดไฟทุกเดือนภายใต้โหลด"},
+      {th:"ออกแบบให้ยืดหยุ่น", en:"Resilient design",
+       explain:"ไม่มีจุดล้มเดียวทั้งคอมพิวเตอร์ เครือข่าย และคน",
+       example:"คอนโทรลเลอร์คลัสเตอร์กระจาย 3 โหนด คนละห้อง"}
+     ]},
+    {th:"วิเคราะห์ความเสี่ยงโครงสร้างคลาวด์", en:"Infrastructure risks",
+     explain:"นอกจากภัยดั้งเดิม ยังมี VM escape, noisy neighbor, snapshot leakage, vendor lock-in",
+     example:"ผู้เช่าอื่นบนโฮสต์เดียวกันกินแบนด์วิดท์จนแอปช้า = ความเสี่ยงด้าน Availability",
+     kids:[
+      {th:"ประเมินและวิเคราะห์ความเสี่ยง", en:"Risk assessment",
+       explain:"ดูทั้งโอกาสและผลกระทบต่อธุรกิจ ไม่ให้คะแนนเทคนิคอย่างเดียว",
+       example:"ช่องโหว่ไฮเปอร์ไวเซอร์โอกาสน้อยแต่ผลกระทบสูงถ้าโฮสต์รวมลูกค้าธนาคาร"},
+      {th:"ความเสี่ยงเสมือนจริง", en:"Virtualization risks",
+       explain:"escape, ตั้งค่า hypervisor ผิด, สแนปช็อตมีข้อมูลค้าง, คอนเทนเนอร์แยกไม่พอ",
+       example:"สแนปช็อตถูกส่งไปบัญชีทดสอบโดยลืมลบไฟล์รหัสผ่าน"},
+      {th:"กลยุทธ์ลดความเสี่ยง", en:"Mitigation",
+       explain:"แพตช์, แยกโฮสต์สำหรับงานอ่อนไหว, เข้ารหัสวอลุม, จำกัด snapshot share",
+       example:"ใช้โฮสต์ทุ่มเท (dedicated hosts) สำหรับระบบชำระเงิน"}
+     ]},
+    {th:"วางและใช้มาตรการควบคุม", en:"Security controls",
+     explain:"คุมกายภาพ ระบบ เครือข่าย เสมือนจริง ตัวตน และการตรวจ",
+     example:"ชุดคอนโทรลขั้นต่ำของบัญชีคลาวด์: MFA ทุกคน, ปิดพอร์ตบริหารจากอินเทอร์เน็ต, เปิดบันทึกทั้งบัญชี",
+     kids:[
+      {th:"ป้องกันกายภาพและสิ่งแวดล้อม", en:"Physical & environmental",
+       explain:"ใน public cloud ตรวจผ่านรายงานผู้ให้ ใน private cloud ต้องทำเอง",
+       example:"ตรวจ SOC 2 ว่ามีควบคุมเข้าศูนย์ 24 ชม."},
+      {th:"ป้องกันระบบ ที่เก็บ และการสื่อสาร", en:"System, storage, communication",
+       explain:"แพตช์ เข้ารหัสวอลุม ใช้ TLS ปิดโปรโตคอลเก่า",
+       example:"บังคับ TLS 1.2 และปิด SMBv1 บนอิมเมจ"},
+      {th:"ป้องกันระบบเสมือนจริง", en:"Virtualization protection",
+       explain:"harden ไฮเปอร์ไวเซอร์ แยกเครือข่ายบริหารโฮสต์ จำกัด console",
+       example:"เครือข่ายจัดการ ESXi อยู่ VLAN แยกและผ่าน bastion"},
+      {th:"IAA ในโครงสร้างคลาวด์", en:"Identification, Authentication, Authorization",
+       explain:"ระบุ ยืนยัน และให้อนุญาตทั้งคนและเครื่อง รวมบริการต่อบริการ",
+       example:"อินสแตนซ์ดึงซีเคร็ตด้วย role ไม่ฝังรหัสในยูสเซอร์ดาต้า"},
+      {th:"กลไกการตรวจสอบ", en:"Audit mechanisms",
+       explain:"ล็อกระนาบบริหาร ล็อกเครือข่าย และหลักฐานอิสระจากผู้ให้",
+       example:"เปิด flow log ทุก subnet และเก็บคนละบัญชีเพื่อกันคนลบหลักฐาน"}
+     ]},
+    {th:"วางแผน BC และ DR", en:"Plan BC/DR",
+     explain:"ลำดับที่ถูก: เข้าใจสภาพแวดล้อม → ความต้องการธุรกิจ/BIA → ความเสี่ยง → กลยุทธ์ → ทดสอบ → บทเรียน",
+     example:"อย่าซื้อบริการ DR ข้ามรีเจียนก่อนรู้ว่า RPO ของบัญชีแยกประเภทคือกี่นาที",
+     kids:[
+      {th:"เข้าใจสภาพแวดล้อมคลาวด์", en:"Understand the cloud environment",
+       explain:"รู้ว่าอะไรเป็นหน้าที่ผู้ให้ อะไรเป็นหน้าที่ลูกค้า และข้อมูลอยู่รีเจียนใด",
+       example:"SLA ผู้ให้รับประกัน AZ ไม่ได้รับประกันว่าแอปของคุณสเกลข้าม AZ แล้ว"},
+      {th:"เข้าใจความต้องการธุรกิจ", en:"Business requirements",
+       explain:"BIA บอกกระบวนการสำคัญ ช่วงเวลาที่ยอมหยุด และข้อมูลที่ยอมเสีย",
+       example:"ปิดบัญชีได้ 4 ชม. แต่รับออเดอร์หยุดได้แค่ 10 นาที"},
+      {th:"เข้าใจความเสี่ยง", en:"Understanding risks",
+       explain:"รวมภัยธรรมชาติ ผู้ให้ล่ม ข้ามแดน และคนสำคัญลาออก",
+       example:"รีเจียนเดียวในประเทศ = ความเสี่ยงภัยธรรมชาติรวมศูนย์"},
+      {th:"กลยุทธ์ DR/BC", en:"DR/BC strategy",
+       explain:"pilot light, warm standby, active-active แพงขึ้นตาม RTO ที่สั้นลง",
+       example:"ระบบร้านค้าใช้ warm standby อีกรีเจียน RTO 30 นาที"},
+      {th:"RTO / RPO / RSL", en:"Recovery metrics",
+       explain:"RTO = เวลายอมกู้จนใช้ได้ RPO = จุดข้อมูลย้อนหลังที่ยอมเสีย RSL = ระดับบริการที่ยอมรับตอนกู้",
+       example:"RTO 2 ชม. RPO 15 นาที RSL 70% ของความจุปกติในช่วงสัปดาห์แรก"}
+     ]}
+  ]
+},
+{
+  id:"ch5", ch:"5", color:"ch-5",
+  th:"บทที่ 5 · ความปลอดภัยของแอปพลิเคชันคลาวด์",
+  en:"Domain 4 — 17%",
+  explain:"โฟกัสคนพัฒนา กระบวนการ SDLC ส่วนประกอบแอป และ IAM ที่ต่างจากศูนย์ข้อมูลปิด",
+  example:"แอปเก่าที่ผูกเซสชันกับ IP ภายในศูนย์ข้อมูล จะพังบนคลาวด์และยังออกแบบ auth แบบรหัสผ่านอย่างเดียว — ต้องปรับก่อนย้าย",
+  kids:[
+    {th:"อบรมและสร้างความตระหนักด้านแอป", en:"Training and awareness",
+     explain:"นักพัฒนาที่เก่งเว็บดั้งเดิมยังพลาดกับดักคลาวด์ เช่น คีย์ในโค้ด และ metadata service",
+     example:"อบรมทีมทุกไตรมาสด้วยแล็บ SSRF ต่อ IMDS แล้วให้แก้ในโค้ดจริง",
+     kids:[
+      {th:"พื้นฐานการพัฒนาบนคลาวด์", en:"Cloud development basics",
+       explain:"ใช้ API ของผู้ให้ สถานะไร้สถานะ สเกลแนวนอน และเก็บซีเคร็ตนอกโค้ด",
+       example:"เซสชันอยู่ Redis ส่วนกลาง ไม่เก็บในหน่วยความจำเครื่องเดียว"},
+      {th:"กับดักที่พบบ่อย", en:"Common pitfalls",
+       explain:"hard-code คีย์, เปิดบัคเก็ต, ไม่จำกัด IAM ของฟังก์ชัน, ลืมล็อก",
+       example:"เอา access key ใส่ Git สาธารณะ บอทรวบในไม่กี่นาที"},
+      {th:"ช่องโหว่คลาวด์ทั่วไป", en:"Common cloud vulnerabilities",
+       explain:"ตั้งค่าผิดเป็นช่องโหว่อันดับต้น ตามด้วย broken access และการฉีดคำสั่ง",
+       example:"นโยบายบัคเก็ตอนุญาต Principal “*” ในการเขียน"}
+     ]},
+    {th:"กระบวนการ SDLC ที่ปลอดภัย", en:"Secure SDLC process",
+     explain:"ใส่ความปลอดภัยตั้งแต่ความต้องการ ไม่ใช่เพนเทสรอบสุดท้าย",
+     example:"ในสปริ้นต์มีเกณฑ์ ‘ยอมรับได้’ ว่าต้องมีหน่วยทดสอบ authz ของ API",
+     kids:[
+      {th:"ความต้องการทางธุรกิจ", en:"Business requirements",
+       explain:"ความปลอดภัยเป็นความต้องการธุรกิจ เช่น ต้องผ่าน PCI ก่อนเปิดรับบัตร",
+       example:"โปรดักต์โอเนอร์เขียนว่า ‘ข้อมูลบัตรห้ามเข้าล็อกแอป’ เป็น acceptance criteria"},
+      {th:"เฟสของ SDLC", en:"SDLC phases",
+       explain:"ความต้องการ ออกแบบ พัฒนา ทดสอบ ปล่อย บำรุง — แต่ละเฟสมีกิจกรรมความปลอดภัย",
+       example:"เฟสออกแบบมี threat model เฟสปล่อยมีสกานอิมเมจ"},
+      {th:"ระเบียบวิธี", en:"Methodologies",
+       explain:"Waterfall, Agile, DevOps ใช้ได้ แต่จุดแทรกคอนโทรลไม่เหมือนกัน",
+       example:"Agile แทรกการตรวจในทุกสปริ้นต์ ไม่รอเกตใหญ่ปีละครั้ง"}
+     ]},
+    {th:"นำ SDLC ไปใช้", en:"Apply secure SDLC",
+     explain:"แปลงกระบวนการเป็นงานจริง: โมเดลภัย เขียนโค้ดปลอดภัย บริหารเวอร์ชัน",
+     example:"ทุกบริการใหม่ต้องมีไดอะแกรมไหลข้อมูลและรายการภัยก่อนเขียนโค้ดสัปดาห์แรก",
+     kids:[
+      {th:"ความเสี่ยงเฉพาะคลาวด์", en:"Cloud-specific risks",
+       explain:"API ผู้ให้, สิทธิ์กว้างของฟังก์ชัน, ข้อมูลข้ามบริการ, lock-in",
+       example:"ฟังก์ชันมีสิทธิ์ S3:* ทั้งบัญชี ทั้งที่ต้องการแค่อ่านบัคเก็ตเดียว"},
+      {th:"สร้างแบบจำลองภัยคุกคาม", en:"Threat modeling",
+       explain:"STRAIDE/LINDDUN ฯลฯ หาว่าใครโจมตีจุดไหนได้",
+       example:"โมเดลพบว่าคิวข้อความไม่มี encryption จึงถูกดักได้จากบทบาทอื่นในบัญชี"},
+      {th:"เขียนโค้ดอย่างปลอดภัย", en:"Secure coding",
+       explain:"กัน injection, จัดการซีเคร็ต, ตรวจอินพุต, ใช้ไลบรารีที่อัปเดต",
+       example:"ใช้ parameterized query ห้ามต่อสตริง SQL จากอินพุตผู้ใช้"},
+      {th:"บริหารคอนฟิกและเวอร์ชัน", en:"SCM and versioning",
+       explain:"เก็บโค้ดและ IaC ในระบบเวอร์ชัน มีรีวิว และย้อนกลับได้",
+       example:"revert Terraform ที่เปิดพอร์ต 3389 ได้ภายใน 10 นาทีจากประวัติ Git"}
+     ]},
+    {th:"ประกันและตรวจสอบซอฟต์แวร์คลาวด์", en:"Software assurance",
+     explain:"ทดสอบทั้งหน้าที่ ความปลอดภัย และคุณภาพบริการบนสภาพแวดล้อมคล้ายโปรดักชัน",
+     example:"รัน DAST บนสเตจที่ต่อ IdP จริงแบบบัญชีทดสอบ ไม่ใช่ปิด auth แล้วทดสอบ",
+     kids:[
+      {th:"ทดสอบเชิงหน้าที่บนคลาวด์", en:"Functional testing",
+       explain:"ยืนยันว่าแอปทำธุรกิจได้เมื่ออยู่บนบริการคลาวด์จริง รวมโควตาและสิทธิ์",
+       example:"เทสต์อัปโหลดไฟล์ 2 GB พบว่าฟังก์ชันหมดเวลา 15 วินาที"},
+      {th:"CSDLC", en:"Cloud Secure Development Lifecycle",
+       explain:"SDLC ที่ปรับกับ API คลาวด์ การสเกล และโมเดลความรับผิดชอบร่วม",
+       example:"เช็กลิสต์ CSDLC มีข้อ ‘ห้ามพึ่ง IP คงที่ของอินสแตนซ์’"},
+      {th:"ทดสอบความปลอดภัย", en:"Security testing",
+       explain:"SAST ดูโค้ด DAST ดูตอนรัน เพนเทส ฟัซซ์ และสกานอิมเมจ",
+       example:"SAST จับคีย์ในซอร์ส DAST จับ IDOR ที่รหัสคนอื่นถูกเรียกได้"},
+      {th:"คุณภาพการบริการ", en:"Quality of Service",
+       explain:"ความเร็ว ความจุ ความต่อเนื่องเป็นส่วนของความปลอดภัยด้าน Availability",
+       example:"SLA หน้าชำระเงิน p95 < 300 ms ถ้าช้าเกินถือว่าไม่ผ่านเกณฑ์ปล่อย"}
+     ]},
+    {th:"ใช้ซอฟต์แวร์ที่ผ่านการตรวจสอบ", en:"Verified secure software",
+     explain:"อย่าดึงไลบรารีหรือ API ตามใจ ต้องมีรายการอนุญาตและตรวจห่วงโซ่อุปทาน",
+     example:"ล็อกเวอร์ชันไลบรารีและตรวจ SBOM ทุกบิลด์",
+     kids:[
+      {th:"API ที่ได้รับอนุมัติ", en:"Approved APIs",
+       explain:"ใช้ชุด API ที่ผ่านการตรวจเรื่อง auth, บันทึก, และอัตราเรียก",
+       example:"ห้ามเรียก API ผู้ให้จากเบราว์เซอร์โดยตรงด้วยคีย์ถาวร"},
+      {th:"บริหารห่วงโซ่อุปทาน", en:"Supply chain management",
+       explain:"ไลบรารี แพ็กเกจ อิมเมจฐาน พาร์ตเนอร์ ล้วนเป็นซัพพลายเชน",
+       example:"อิมเมจฐานต้องมาจากรีจิสทรีภายในที่สแกนแล้ว ไม่ดึงล่าสุดจากอินเทอร์เน็ตตอนบิลด์"},
+      {th:"ความรู้จากชุมชน", en:"Community knowledge",
+       explain:"ใช้ข่าวช่องโหว่และแนวทางจาก CSA, OWASP, ผู้ให้บริการ แต่ต้องคัดกรอง",
+       example:"หลังมีข่าวไลบรารีโลจ์4j ทีมใช้รายการจากชุมชนเพื่อกวาดทั้งคลัสเตอร์ในวันเดียว"}
+     ]},
+    {th:"สถาปัตยกรรมแอปคลาวด์", en:"Cloud application architecture",
+     explain:"เสริมด้วย WAF, การเข้ารหัสในแอป, แซนด์บ็อกซ์ และเสมือนจริงระดับแอป",
+     example:"รันตัวแปลงไฟล์ในแซนด์บ็อกซ์คนละบัญชี ไม่ให้มีสิทธิ์เครือข่ายออกอินเทอร์เน็ต",
+     kids:[
+      {th:"อุปกรณ์เสริมด้านความปลอดภัย", en:"Supplemental security devices",
+       explain:"WAF, XML firewall, DAM, API gateway ช่วยชั้นแอป",
+       example:"WAF กัน SQLi พื้นฐาน ส่วน DAM แจ้งเมื่อมีคิวรีที่ดึงตารางทั้งก้อน"},
+      {th:"วิทยาการเข้ารหัสในแอป", en:"Application cryptography",
+       explain:"แอปจัดการคีย์ฟิลด์อ่อนไหวเองเมื่อแพลตฟอร์มเข้ารหัสจานไม่พอ",
+       example:"เข้ารหัสช่องหมายเลขบัตรในแอปก่อน INSERT ลงฐาน"},
+      {th:"แซนด์บ็อกซ์", en:"Sandboxing",
+       explain:"รันโค้ดไม่ไว้ใจในพื้นที่จำกัดสิทธิ์",
+       example:"ลูกค้าอัปโหลดแมโคร ออฟฟิศถูกเปิดในคอนเทนเนอร์ที่ไม่มีสิทธิ์เครือข่าย"},
+      {th:"เสมือนจริงระดับแอป", en:"Application virtualization",
+       explain:"ส่งแอปให้ผู้ใช้โดยไม่ติดตั้งเต็มบนเครื่อง ลดผิวการโจมตีที่เอนด์พอยต์",
+       example:"ส่งไคลเอนต์หนาผ่าน App Virtualization ให้คู่ค้าภายนอก"}
+     ]},
+    {th:"ออกแบบ IAM ที่เหมาะสม", en:"IAM solutions",
+     explain:"คลาวด์พึ่ง federation, SSO, MFA และมักมี CASB เป็นจุดรวมนโยบาย",
+     example:"พนักงานเข้าทุก SaaS ด้วย SSO จาก IdP บริษัท ปิดบัญชีวันลาออกแล้วทุกแอปหลุดพร้อมกัน",
+     kids:[
+      {th:"ตัวตนแบบสหพันธรัฐ", en:"Federated identity",
+       explain:"องค์กรหนึ่งเชื่อผู้ให้ตัวตนอีกแห่งผ่าน SAML/OIDC ไม่ต้องสร้างรหัสซ้ำทุกแอป",
+       example:"ล็อกอิน SAP บนคลาวด์ด้วยบัญชี Azure AD ผ่าน SAML"},
+      {th:"ผู้ให้บริการตัวตน", en:"Identity Providers",
+       explain:"IdP ออกข้อยืนยันตัวตน เป็นจุดสำคัญที่ต้อง harden และมีสำรอง",
+       example:"IdP ล่มทั้งบริษัทเข้า SaaS ไม่ได้ จึงมี IdP สำรองและ break-glass"},
+      {th:"ลงชื่อเข้าใช้ครั้งเดียว", en:"Single Sign-On",
+       explain:"ยืนยันครั้งเดียวใช้หลายบริการ ลดรหัสซ้ำแต่เพิ่มความสำคัญของเซสชัน",
+       example:"หมดเวลาเซสชันกลาง 8 ชม. และบังคับ MFA ใหม่เมื่อเข้าโซนเงิน"},
+      {th:"ยืนยันตัวตนหลายปัจจัย", en:"MFA",
+       explain:"ใช้อย่างน้อยสองประเภท: สิ่งที่รู้ มี เป็น อย่าใช้ SMS เป็นทางเดียวถ้าเลี่ยงได้",
+       example:"บังคับแอป authenticator สำหรับทุกบัญชีที่เข้า management plane"},
+      {th:"Cloud Access Security Broker", en:"CASB",
+       explain:"จุดนโยบายระหว่างผู้ใช้กับบริการคลาวด์ เห็นแชโดว์ไอที บังคับ DLP และเข้ารหัส",
+       example:"CASB พบว่าฝ่ายขายใช้แอปแชร์ไฟล์ที่ไม่ได้รับอนุมัติแล้วบล็อกการอัปโหลดรายชื่อลูกค้า"}
+     ]}
+  ]
+},
+{
+  id:"ch6", ch:"6", color:"ch-6",
+  th:"บทที่ 6 · การปฏิบัติการความปลอดภัยบนคลาวด์",
+  en:"Domain 5 — 16%",
+  explain:"งานประจำที่ทำให้ระบบปลอดภัยจริง: สร้างเบสไลน์ แพตช์ เฝ้า บริหารเปลี่ยนแปลง เก็บหลักฐาน และสื่อสารผู้เกี่ยวข้อง",
+  example:"เหตุการณ์ดิสก์เต็มจนล็อกหยุด — ไม่ใช่ช่องโหว่ใหม่ แต่เป็นปฏิบัติการความจุและการเฝ้าระวังที่ขาด",
+  kids:[
+    {th:"สร้างโครงสร้างกายภาพและตรรกะ", en:"Build infrastructure",
+     explain:"ตั้งค่าฮาร์ดแวร์/ฮาร์ดแวร์เสมือน เครื่องมือบริหาร และเกสต์ให้ถูกตั้งแต่ต้น เพราะแก้ทีหลังแพง",
+     example:"เทมเพลต VM ที่เปิด SSH ด้วยรหัสผ่านว่างถูกโคลน 200 เครื่องในหนึ่งบ่าย",
+     kids:[
+      {th:"คอนฟิกความปลอดภัยฮาร์ดแวร์", en:"Hardware-specific security",
+       explain:"ปิดพอร์ตบริหารที่ไม่ใช้ เปิด TPM/UEFI secure boot ตามที่ระบบรองรับ",
+       example:"ปิด IPMI จากเครือข่ายทั่วไป ให้เข้าได้แค่เน็ตบริหาร"},
+      {th:"ติดตั้งเครื่องมือบริหาร", en:"Management tools",
+       explain:"เครื่องมือบริหารมีสิทธิ์สูง ต้องแยกเครือข่าย แพตช์ และมี MFA",
+       example:"คอนโซลเสมือนจริงไม่เผยพอร์ตออกอินเทอร์เน็ต ใช้ผ่าน bastion"},
+      {th:"ความปลอดภัยฮาร์ดแวร์เสมือน", en:"Virtual hardware",
+       explain:"ลบอุปกรณ์เสมือนที่ไม่ใช้ เช่น CD-ROM แชร์คลิปบอร์ด",
+       example:"ปิดการลากไฟล์จากโฮสต์ลงเกสต์ในโปรดักชัน"},
+      {th:"ชุดเครื่องมือเกสต์ OS", en:"Guest toolsets",
+       explain:"VMware Tools/Cloud-Init ช่วยบริหารแต่เพิ่มช่องทางโฮสต์-เกสต์ ต้องอัปเดต",
+       example:"แพตช์ guest tools หลังพบช่องโหว่คัดลอกไฟล์ข้าม"}
+     ]},
+    {th:"เดินระบบโครงสร้าง", en:"Operate the infrastructure",
+     explain:"เข้าถึง เครือข่าย เบสไลน์ แพตช์ IaC ความพร้อมใช้ เฝ้า สำรอง และระนาบบริหาร",
+     example:"ใช้ IaC ทำให้เซิร์ฟเวอร์ใหม่ได้เบสไลน์เดียวกับที่ตรวจผ่าน ไม่มีเครื่องมือติดตั้งหลุดนโยบาย",
+     kids:[
+      {th:"ควบคุมการเข้าถึงท้องถิ่นและระยะไกล", en:"Local and remote access",
+       explain:"ลดการเข้าตรง ใช้ bastion/JIT และบันทึกเซสชันบริหาร",
+       example:"เปิดพอร์ต 22 ได้ 30 นาทีต่อคำขอ แล้วปิดอัตโนมัติ"},
+      {th:"คอนฟิกเครือข่ายที่ปลอดภัย", en:"Secure network configuration",
+       explain:"VLAN/VPC, เส้นทางน้อยสุด, แยกชั้น",
+       example:"ซับเน็ตข้อมูลไม่มี route ไป Internet Gateway"},
+      {th:"ควบคุมความปลอดภัยเครือข่าย", en:"Network security controls",
+       explain:"SG/NSG, WAF, IDS/IPS, microsegmentation",
+       example:"อนุญาต 443 จากชั้นเว็บถึงชั้นแอปเท่านั้น ไม่เปิดทั้ง VPC"},
+      {th:"Harden OS ด้วยเบสไลน์", en:"OS hardening via baselines",
+       explain:"ขั้นตอนที่ถูก: ติดตั้งสะอาด → ปิดบริการไม่จำเป็น → แพตช์ → ล็อกคอนฟิก → ทำอิมเมจ",
+       example:"ข้อสอบถามขั้นแรกของการทำเบสไลน์มักเป็น clean install ไม่ใช่แพตช์เครื่องสกปรก"},
+      {th:"บริหารแพตช์", en:"Patch management",
+       explain:"รู้สินทรัพย์ ทดสอบ ลงแพตช์ ยืนยัน และมีข้อยกเว้นที่มีเจ้าของ",
+       example:"CVE วิกฤตลงบนสเตจใน 24 ชม. โปรดักชันใน 72 ชม. ตามนโยบาย"},
+      {th:"กลยุทธ์ Infrastructure as Code", en:"IaC",
+       explain:"กำหนดโครงสร้างเป็นโค้ด ตรวจในรีวิว ทำให้สร้างซ้ำและตรวจย้อนได้",
+       example:"นโยบาย CI ปฏิเสธเทมเพลตที่มี security group เปิด 0.0.0.0/0"},
+      {th:"ความพร้อมใช้โฮสต์เดี่ยว/คลัสเตอร์/เกสต์", en:"Host availability",
+       explain:"โฮสต์เดี่ยวพังแล้วจบ คลัสเตอร์ทนโหนดพัง เกสต์ต้องมี HA ระดับแอปด้วย",
+       example:"VM สำคัญมีคู่อย่างน้อยสอง AZ ไม่พึ่ง live migration อย่างเดียว"},
+      {th:"เฝ้าระวังประสิทธิภาพและฮาร์ดแวร์", en:"Monitoring",
+       explain:"เฝ้า CPU จาน เครือข่าย อุณหภูมิ และโควตาคลาวด์",
+       example:"แจ้งเตือนเมื่อโควตา IP สาธารณะใกล้เต็มก่อนโปรโมชัน"},
+      {th:"สำรองและกู้คืน", en:"Backup and restore",
+       explain:"สำรองไม่พอ ต้องซ้อมกู้ และแยกบัญชีเก็บสำรองกันแรนซัมแวร์",
+       example:"สำรองข้ามบัญชีที่ปิดสิทธิ์ลบจากบัญชีโปรดักชัน"},
+      {th:"ระนาบบริหารจัดการ", en:"Management plane operations",
+       explain:"ปฏิบัติการที่นี่มีผลทั้งฝูงเครื่อง ต้องมีบันทึกและการอนุมัติ",
+       example:"สคริปต์ปิดเครื่องทั้งคลัสเตอร์ต้องรันจากไปป์ไลน์ที่มีการอนุมัติ ไม่ใช่จากโน้ตบุ๊กคนเดียว"}
+     ]},
+    {th:"มาตรฐานควบคุมปฏิบัติการ (ITIL)", en:"ITIL operational controls",
+     explain:"กระบวนการบริการทำให้เปลี่ยนระบบโดยไม่สูญเสียการควบคุม",
+     example:"ลงแพตช์ใหญ่โดยไม่มี change ticket แล้วระบบล่ม จะไม่รู้ว่าจะถอยอะไร",
+     kids:[
+      {th:"บริหารการเปลี่ยนแปลง", en:"Change management",
+       explain:"ขอ ตรวจ อนุมัติ ลง ตรวจหลังลง มีทางถอย",
+       example:"เปลี่ยน SG โปรดักชันต้อง CAB ด่วนและมีแผน rollback"},
+      {th:"บริหารความต่อเนื่อง", en:"Continuity management",
+       explain:"รักษาความสามารถทางธุรกิจตาม BIA ไม่ใช่แค่เปิดเครื่องได้",
+       example:"ซ้อมสลับรีเจียนทุก 6 เดือนแล้ววัด RTO จริง"},
+      {th:"บริหารความมั่นคงข้อมูล", en:"Information security management",
+       explain:"นโยบาย คอนโทรล และการทบทวนให้ครบวงจร ISMS",
+       example:"ทบทวนสิทธิ์ผู้ดูแลคลาวด์ทุกไตรมาส"},
+      {th:"ปรับปรุงบริการต่อเนื่อง", en:"Continual service improvement",
+       explain:"ใช้บทเรียนและตัวชี้วัดเพื่อปรับกระบวนการ",
+       example:"หลังเหตุล่ม พบว่า runbook เก่า แล้วเพิ่มขั้นตรวจสอบ DNS"},
+      {th:"บริหารเหตุการณ์ / ปัญหา", en:"Incident & problem management",
+       explain:"Incident คืนบริการ Problem หาสาเหตุราก",
+       example:"รีสตาร์ทบริการแล้วกลับมา = ปิด incident แต่เปิด problem เพราะล่มซ้ำสามครั้ง"},
+      {th:"บริหารการปล่อยและติดตั้ง", en:"Release and deployment",
+       explain:"แพ็กของ ทดสอบ ปล่อยแบบควบคุม มีฟีเจอร์แฟล็กและถอยได้",
+       example:"canary 5% ของทราฟฟิกก่อนปล่อยเต็ม"},
+      {th:"บริหารคอนฟิกuration", en:"Configuration management",
+       explain:"รู้ว่าของแต่ละชิ้นควรเป็นสถานะใด และจับสิ่งที่คลาดเคลื่อน",
+       example:"ตัวตรวจพบว่า VM ถูกเปิดพอร์ตมือ จึงคืนค่าตามเบสไลน์"},
+      {th:"บริหารระดับบริการ / ความพร้อมใช้ / ความจุ", en:"SLM, availability, capacity",
+       explain:"SLA ต้องวัดได้ ความพร้อมใช้มาจากออกแบบ ความจุต้องคาดการณ์ก่อนเต็ม",
+       example:"เตือนเมื่อ CPU คลัสเตอร์เฉลี่ยเกิน 70% สองวันติด"}
+     ]},
+    {th:"สนับสนุนนิติวิทยาศาสตร์ดิจิทัล", en:"Digital forensics",
+     explain:"ในคลาวด์สื่อไม่ได้อยู่กับเรา ต้องวางสัญญาและวิธีเก็บล่วงหน้า ความเร็วสำคัญเพราะทรัพยากรสั้นอายุ",
+     example:"อินสแตนซ์ถูก terminate ก่อนถ่ายโวลุม หลักฐานในหน่วยความจำหาย",
+     kids:[
+      {th:"วิธีเก็บข้อมูลหลักฐาน", en:"Collection methodologies",
+       explain:"ถ่ายสแนปช็อต โวลุม ล็อก หน่วยความจำ ถ้ารองรับ และบันทึกแฮชทันที",
+       example:"isolate VM จากเครือข่าย → snapshot วอลุม → คำนวณแฮช → คัดลอกไปบัญชีหลักฐาน"},
+      {th:"บริหารหลักฐาน", en:"Evidence management",
+       explain:"ลูกโซ่ครอบครอง ผู้เข้าถึงน้อย เก็บคนละบัญชี ห้ามวิเคราะห์บนต้นฉบับ",
+       example:"วิเคราะห์บนสำเนาที่เขียนไม่ได้ ต้นฉบับล็อกในบัคเก็ตที่มี Object Lock"}
+     ]},
+    {th:"สื่อสารกับผู้เกี่ยวข้อง", en:"Communicate with parties",
+     explain:"ผู้ขาย ลูกค้า พันธมิตร หน่วยงานกำกับ และผู้บริหาร ต้องการข้อมูลคนละชุด",
+     example:"ข้อมูลหลุด: แจ้งผู้กำกับตามกำหนดกฎหมาย แจ้งลูกค้าที่ได้รับผลกระทบ แจ้งผู้ให้เพื่อขอวอลุม",
+     kids:[
+      {th:"ผู้ขาย ลูกค้า พันธมิตร", en:"Vendors, customers, partners",
+       explain:"กำหนดช่องทาง เวลา และข้อมูลที่เปิดได้ในสัญญา",
+       example:"SLA บังคับให้ CSP แจ้งเหตุภายใน 1 ชม. หลังยืนยัน"},
+      {th:"หน่วยงานกำกับและผู้มีส่วนได้ส่วนเสีย", en:"Regulators and stakeholders",
+       explain:"บางอุตสาหกรรมมีเวลาแจ้งตายตัว การแจ้งช้ามีโทษ",
+       example:"แจ้งผู้กำกับความเป็นส่วนตัวภายใน 72 ชม. ตาม GDPR"}
+     ]},
+    {th:"บริหารปฏิบัติการความปลอดภัย", en:"Manage security operations",
+     explain:"SOC เฝ้าคอนโทรล เก็บล็อก และตอบสนองเป็นงานต่อเนื่อง ไม่ใช่โปรเจกต์",
+     example:"กฎตรวจพบว่ามีการสร้างคีย์เข้าถึงจากประเทศที่ไม่เคยใช้ แล้วสร้างทิกเก็ตให้นักวิเคราะห์",
+     kids:[
+      {th:"ศูนย์ปฏิบัติการความปลอดภัย", en:"SOC",
+       explain:"คน + กระบวนการ + เครื่องมือเฝ้า วิเคราะห์ ตอบสนอง",
+       example:"SOC 3 กะ ใช้เพลย์บุ๊กแยกอินสแตนซ์ที่ติดมัลแวร์ออกจาก VPC"},
+      {th:"เฝ้าระวังมาตรการควบคุม", en:"Monitoring of controls",
+       explain:"ตรวจว่าคอนโทรลยังทำงาน ไม่ใช่แค่เคยเปิดวันติดตั้ง",
+       example:"แจ้งเตือนเมื่อมีคนปิดการเข้ารหัสบังคับของบัคเก็ต"},
+      {th:"เก็บและวิเคราะห์ล็อก", en:"Log capture and analysis",
+       explain:"เวลากลางเดียวกัน เก็บครบระยะ กันการแก้ และมีคนดู",
+       example:"ล็อกถูกส่งแบบต่อเนื่องไปบัญชีแยก ไม่เก็บแค่ในตัวเครื่องที่ผู้โจมตีลบได้"}
+     ]}
+  ]
+},
+{
+  id:"ch7", ch:"7", color:"ch-7",
+  th:"บทที่ 7 · กฎหมาย ความเสี่ยง และการปฏิบัติตามข้อกำหนด",
+  en:"Domain 6 — 13%",
+  explain:"น้ำหนักไม่สูงสุดแต่ข้อละเอียด: กฎหมายชนกัน ใครเป็นผู้ควบคุม eDiscovery การตรวจที่เข้าไม่ถึงศูนย์ และสัญญา",
+  example:"บริษัทไทยเก็บข้อมูลลูกค้า EU บนคลาวด์สหรัฐ ต้องมีฐานโอนข้อมูล ประเมินผู้ประมวลผล และตอบสิทธิ์เจ้าของข้อมูลเอง ผู้ให้ช่วยได้ตามสัญญาเท่านั้น",
+  kids:[
+    {th:"ข้อกำหนดทางกฎหมายและความเสี่ยงเฉพาะคลาวด์", en:"Legal requirements and unique risks",
+     explain:"ข้อมูลอาจอยู่หลายประเทศพร้อมกัน หมายศาลประเทศหนึ่งอาจชนกับกฎหมายอีกประเทศ",
+     example:"ศาลสหรัฐขอข้อมูลที่กฎหมาย EU ห้ามโอนออก — ต้องมีกระบวนการกฎหมายไม่ใช่แค่ก๊อปไฟล์",
+     kids:[
+      {th:"กฎหมายระหว่างประเทศที่ขัดกัน", en:"Conflicting international legislation",
+       explain:"หลักตั้งอยู่กับที่ตั้งข้อมูล ที่ตั้งผู้ให้ และที่ตั้งเจ้าของข้อมูล อาจไม่ตรงกัน",
+       example:"ข้อมูลคนไทยอยู่รีเจียนสิงคโปร์ของบริษัทอเมริกัน โดนทั้งกฎหมายไทย PDPA และคำสั่งศาลสหรัฐต่อบริษัทแม่"},
+      {th:"ประเมินความเสี่ยงทางกฎหมาย", en:"Legal risks specific to cloud",
+       explain:"รวมการเข้าถึงโดยรัฐบาลผู้ให้ การยึดสื่อร่วม และการหาเขตศาลเมื่อมีคดี",
+       example:"สัญญาที่ไม่กำหนด governing law ทำให้ฟ้องยากเมื่อข้อมูลหาย"},
+      {th:"กรอบและแนวทางกฎหมาย", en:"Legal frameworks",
+       explain:"ใช้กรอบเช่น ISO, CSA, แนวทาง OECD/NIST ประกอบกฎหมายท้องถิ่น",
+       example:"อ้าง CSA CCM ในภาคผนวกสัญญาเพื่อกำหนดคอนโทรลขั้นต่ำ"},
+      {th:"eDiscovery", en:"eDiscovery",
+       explain:"การค้นหาหลักฐานอิเล็กทรอนิกส์ในคลาวด์ต้องอาศัย API สิทธิ์ และความร่วมมือของผู้ให้",
+       example:"ทนายขอเมล 3 ปีของพนักงาน 10 คน — ต้องใช้เครื่องมือ eDiscovery ของ SaaS ไม่ใช่ยึดเซิร์ฟเวอร์"},
+      {th:"ข้อกำหนดนิติวิทยาศาสตร์", en:"Forensics requirements",
+       explain:"สัญญาต้องให้สิทธิ์ได้สแนปช็อต ล็อก และผู้ติดต่อฉุกเฉิน มิฉะนั้นเก็บหลักฐานไม่ทัน",
+       example:"ข้อสัญญาบังคับให้ CSP คงสภาพ VM 72 ชม. หลังคำขอเป็นลายลักษณ์อักษร"}
+     ]},
+    {th:"ประเด็นความเป็นส่วนตัว", en:"Privacy issues",
+     explain:"Privacy ไม่เท่า Confidentiality PII ตามสัญญาต่างจาก PII ตามกฎหมาย",
+     example:"ห้ามเปิดเผยรายชื่อพนักงานตามสัญญาจ้าง แต่รายชื่อนั้นอาจไม่ใช่ข้อมูลที่กฎหมายกำหนดมาตรการพิเศษ",
+     kids:[
+      {th:"PII ตามสัญญา vs ตามกฎหมาย", en:"Contractual vs regulated PII",
+       explain:"สัญญากำหนดระหว่างคู่ค้า กฎหมายกำหนดแม้ไม่ได้เขียนในสัญญา",
+       example:"พาร์ตเนอร์สัญญาว่าไม่ขายอีเมล แต่ถ้าเป็นข้อมูลคน EU ยังต้องทำตาม GDPR อยู่ดี"},
+      {th:"กฎหมายรายประเทศเรื่อง PII", en:"Country-specific privacy laws",
+       explain:"GDPR, PDPA ไทย, HIPAA ฯลฯ กำหนดฐานกฎหมาย สิทธิ์ และโทษต่างกัน",
+       example:"HIPAA คุ้มครอง PHI ในสหรัฐ SOX เน้นบันทึกการเงิน ไม่ใช่ความเป็นส่วนตัวคนไข้"},
+      {th:"แยก CIA กับ Privacy", en:"CIA vs Privacy",
+       explain:"เข้ารหัสเก่งไม่ได้แปลว่าประมวลผลถูกกฎหมาย ถ้าไม่มีฐานหรือความยินยอม",
+       example:"ฐานข้อมูลลูกค้าเข้ารหัสครบแต่เก็บนานเกินความจำเป็น = ผิด Privacy"},
+      {th:"ข้อกำหนดความเป็นส่วนตัวมาตรฐาน", en:"Standard privacy requirements",
+       explain:"แจ้งวัตถุประสงค์ จำกัดการใช้ ให้เข้าถึง/แก้/ลบ รักษาความปลอดภัย และแจ้งเหตุ",
+       example:"ฟอร์มสมัครต้องบอกว่าเก็บไว้กี่วัน และใช้เพื่ออะไร"},
+      {th:"ประเมินผลกระทบความเป็นส่วนตัว", en:"Privacy Impact Assessment",
+       explain:"ประเมินก่อนระบบใหม่ที่ประมวลผลข้อมูลบุคคลจำนวนมากหรืออ่อนไหว",
+       example:"ก่อนเปิดระบบจดจำใบหน้าที่สำนักงาน ทำ PIA แล้วตัดสินใจไม่ใช้กับผู้มาติดต่อภายนอก"}
+     ]},
+    {th:"กระบวนการตรวจและปรับใช้กับคลาวด์", en:"Audit processes for cloud",
+     explain:"ผู้ตรวจลูกค้ามักเข้าศูนย์ผู้ให้ไม่ได้ จึงพึ่งรายงานอิสระและสิทธิ์ตรวจตามสัญญา",
+     example:"แทนการเดินสำรวจชั้นวาง ใช้ SOC 2 Type II ปีล่าสุดบวกสิทธิ์ถามข้อสงสัย",
+     kids:[
+      {th:"การควบคุมตรวจภายใน/ภายนอก", en:"Internal and external audit",
+       explain:"ภายในช่วยปรับปรุง ภายนอกสร้างความเชื่อมั่นต่อลูกค้าและผู้กำกับ",
+       example:"ออดิตภายในพบว่าบัญชีเก่าของพนักงานลาออกยังอยู่ ออดิตภายนอกยืนยันว่ากระบวนการ offboarding มีอยู่"},
+      {th:"ผลกระทบของข้อกำหนดการตรวจ", en:"Impact of audit requirements",
+       explain:"คลาวด์เพิ่มงานรวบรวมหลักฐานข้ามผู้ให้หลายราย",
+       example:"ระบบหนึ่งใช้ IaaS + SaaS สองเจ้า ต้องรวมหลักฐานสองชุดให้ผู้ตรวจ"},
+      {th:"ความท้าทายของเสมือนจริง", en:"Virtualization assurance challenges",
+       explain:"ทรัพยากรลอยและสั้นอายุ หลักฐานตอนตรวจอาจไม่มีเครื่องเดิมแล้ว",
+       example:"ออดิเตอร์ขอเครื่องที่รันงานเดือนที่แล้ว แต่เป็นคอนเทนเนอร์ที่ถูกทำลายไปแล้ว เหลือแค่ล็อก IaC"},
+      {th:"ประเภทรายงานการตรวจ", en:"Audit report types",
+       explain:"SOC 1 เน้นการเงิน SOC 2 เน้นทรัสต์เกณฑ์ SOC 3 เป็นสรุปสาธารณะ ISO 27001 รับรอง ISMS CSA STAR มีหลายระดับ",
+       example:"ลูกค้า SaaS ขอ SOC 2 Type II ไม่ใช่ Type I เพราะต้องการหลักว่าคอนโทรลทำงานตลอดช่วงเวลา"},
+      {th:"ข้อจำกัดขอบเขตการตรวจ", en:"Audit scope restrictions",
+       explain:"รายงานครอบคลุมเฉพาะบริการและสถานที่ที่ระบุ อย่าอ่านเกินขอบเขต",
+       example:"SOC 2 ครอบคลุม IaaS compute แต่ไม่ครอบคลุมมาร์เก็ตเพลสของพาร์ตเนอร์"},
+      {th:"วิเคราะห์ช่องว่าง", en:"Gap analysis",
+       explain:"เทียบของที่มีกับเกณฑ์ที่ต้องถึง แล้ววางแผนปิดช่อง",
+       example:"ต้องการ ISO 27001 พบว่ายังไม่มีกระบวนการจัดการสินทรัพย์คลาวด์"},
+      {th:"วางแผนตรวจ / ISMS / นโยบาย", en:"Audit planning, ISMS, policies",
+       explain:"มีระบบบริหารความปลอดภัย ชุดนโยบาย และปฏิทินตรวจ",
+       example:"นโยบายคลาวด์กำหนดว่าบัญชีใหม่ต้องเปิดบันทึกภายใน 24 ชม."},
+      {th:"อุตสาหกรรมที่กำกับเข้ม", en:"Highly regulated industries",
+       explain:"เงิน สุขภาพ รัฐ มีเกณฑ์พิเศษเรื่องที่ตั้งข้อมูลและการเข้าถึง",
+       example:"โรงพยาบาลเลือกผู้ให้ที่มีรีเจียนในประเทศและลงนาม BAA/เทียบเท่า"},
+      {th:"ผลกระทบของไอทีกระจายตัว", en:"Distributed IT model",
+       explain:"แผนกซื้อ SaaS เองทำให้ขอบเขตตรวจไม่ครบ",
+       example:"ฝ่ายขายใช้เครื่องมือที่ไอทีไม่รู้ ออดิเตอร์จึงไม่เห็นคอนโทรลที่นั่น"}
+     ]},
+    {th:"คลาวด์กับการบริหารความเสี่ยงองค์กร", en:"Enterprise risk management",
+     explain:"ความเสี่ยงของผู้ให้กลายเป็นความเสี่ยงของลูกค้า แต่ลูกค้าโอนความรับผิดชอบต่อเจ้าของข้อมูลไม่หมด",
+     example:"CSP ล่มทั้งรีเจียน ลูกค้ายังต้องอธิบายลูกค้าตัวเองแม้จะมีเครดิตในบิล",
+     kids:[
+      {th:"ประเมินการบริหารความเสี่ยงของผู้ให้บริการ", en:"Assess provider RM",
+       explain:"ดูกรอบความเสี่ยง รายงานเหตุ ประกันภัย และประวัติเหตุ",
+       example:"ถามว่าผู้ให้ทดสอบ DR ล่าสุดเมื่อไร และผลต่างจาก RTO ในเอกสารการตลาดเท่าไร"},
+      {th:"เจ้าของ/ผู้ควบคุม vs ผู้ดูแล/ผู้ประมวลผล", en:"Owner/controller vs custodian/processor",
+       explain:"ผู้ควบคุมกำหนดวัตถุประสงค์ ผู้ประมวลผลทำตามคำสั่ง ผู้ดูแลเก็บรักษา ลูกค้ามักเป็นผู้ควบคุม",
+       example:"โรงเรียนเป็นผู้ควบคุมข้อมูลนักเรียน ผู้ให้ LMS เป็นผู้ประมวลผล"},
+      {th:"การบำบัดความเสี่ยง", en:"Risk treatment",
+       explain:"ใช้สี่ทางเลือกเดิมแต่สัญญาเป็นเครื่องมือโอนที่สำคัญในคลาวด์",
+       example:"โอนความเสี่ยงไฟไหม้ศูนย์ด้วยสัญญาและประกันของผู้ให้ แต่ไม่โอนความเสี่ยงตั้งค่า IAM ผิด"},
+      {th:"กรอบความเสี่ยงต่าง ๆ", en:"Risk frameworks",
+       explain:"ISO 31000, NIST RMF, FAIR ฯลฯ ใช้ให้สอดคล้องทั้งองค์กร",
+       example:"องค์กรใช้ NIST RMF กับระบบราชการและแมปคอนโทรลคลาวด์เข้า SP 800-53"},
+      {th:"ตัวชี้วัดความเสี่ยง", en:"Risk metrics",
+       explain:"วัดจำนวนช่องโหว่ค้าง เวลาแพตช์ เปอร์เซ็นต์ทรัพยากรผิดคอนฟิก",
+       example:"KPI: ทรัพยากร public ที่ไม่ได้รับอนุญาตต้องเป็นศูนย์ภายใน 24 ชม."},
+      {th:"ประเมินสภาพแวดล้อมความเสี่ยง", en:"Risk environment",
+       explain:"บริบทกฎหมาย ภัยคุกคาม ผู้ขายย่อย และการพึ่งพาผู้ให้รายเดียว",
+       example:"บริการสำคัญทั้งหมดอยู่ผู้ให้รายเดียว = ความเสี่ยงรวมศูนย์"}
+     ]},
+    {th:"เอาต์ซอร์สและการออกแบบสัญญาคลาวด์", en:"Outsourcing and contracts",
+     explain:"สัญญาคือคอนโทรลทางกฎหมาย ต้องระบุ SLA สิทธิ์ตรวจ eDiscovery ที่ตั้งข้อมูล การคืนข้อมูลเมื่อเลิก",
+     example:"สัญญาที่ไม่มีข้อส่งออกข้อมูลเมื่อเลิกใช้ ทำให้ย้ายออกต้องเจรจาใหม่ทั้งปี",
+     kids:[
+      {th:"ความต้องการทางธุรกิจ", en:"Business requirements",
+       explain:"แปล BIA และกฎหมายเป็นข้อความสัญญา ไม่ให้ฝ่ายจัดซื้อเน้นราคาอย่างเดียว",
+       example:"ระบุว่าข้อมูลต้องอยู่รีเจียนในประเทศและมีสำเนาที่สองในประเทศเดียวกัน"},
+      {th:"บริหารผู้ขาย", en:"Vendor management",
+       explain:"ประเมินก่อนใช้ ระหว่างใช้ และเมื่อเลิก รวมผู้ขายย่อย",
+       example:"ผู้ให้ใช้ศูนย์ของบริษัทอื่น ต้องเปิดเผย subprocessor"},
+      {th:"บริหารสัญญา / SLA", en:"Contract / SLA",
+       explain:"SLA ต้องวัดได้ มีเครดิต/บทลงโทษ และไม่สละสิทธิ์เกินควร",
+       example:"uptime 99.9% วัดรายเดือน ถ้าน้อยกว่านั้นได้เครดิต 10% แต่เครดิตไม่ชดเชยค่าปรับจากลูกค้าคุณ"},
+      {th:"บริหารผู้ขายระดับบริหาร", en:"Executive vendor management",
+       explain:"ผู้บริหารต้องมีช่องทางเมื่อเหตุใหญ่ ไม่ปล่อยให้จบที่เจ้าหน้าที่ปฏิบัติการ",
+       example:"มีรายชื่อผู้ติดต่อระดับผู้อำนวยการของผู้ให้สำหรับเหตุข้อมูลหลุด"},
+      {th:"ห่วงโซ่อุปทาน", en:"Supply chain management",
+       explain:"ความเสี่ยงต่อเนื่องตามผู้ขายของของผู้ขาย",
+       example:"ไลบรารีของพาร์ตเนอร์ทำให้แอปมีช่องโหว่ ทั้งที่ผู้ให้ IaaS ปลอดภัย"}
+     ]}
+  ]
+},
+{
+  id:"app", ch:"A", color:"ch-8",
+  th:"ภาคผนวก · คำถามทบทวน คำศัพท์ และวิธีใช้ควิซ",
+  en:"Appendix + glossary anchors",
+  explain:"ใช้แผนที่นี้ทบทวนแนวคิด แล้วไปยิงข้อในควิซของโปรเจกต์ คำด้านล่างออกบ่อย",
+  example:"อ่านบท 3 เรื่อง tokenization จนอธิบายได้ แล้วไปค้นคำนี้ใน ccsp-quiz.html เพื่อล็อกแพทเทิร์นข้อสอบ",
+  kids:[
+    {th:"Appendix A คำถามทบทวนสอบ", en:"Exam review questions",
+     explain:"หนังสือมีข้อทบทวนท้ายบทและภาคผนวกพร้อมคำอธิบาย ใช้ตรวจว่าจำแนวคิดหรือแค่จำคำ",
+     example:"ทำข้อท้ายบทโดยไม่ดูเฉลย แล้วเทียบเหตุผล ไม่ใช่แค่ตัวเลือก"},
+    {th:"Appendix B เนื้อหาออนไลน์", en:"Online content / TotalTester",
+     explain:"หนังสือชี้ไปยังคลังข้อออนไลน์ ใช้โหมดสอบเต็มและโหมดตามโดเมน",
+     example:"จำลองสอบ 150 ข้อใน 4 ชม. สัปดาห์สุดท้าย ไม่ใช่ทำทีละข้อแบบเปิดหนังสืออย่างเดียว"},
+    {th:"อภิธานศัพท์ที่ควรจำ", en:"Glossary anchors",
+     explain:"คำเหล่านี้มักเป็นตัวล่อในข้อสอบ เพราะคล้ายกัน",
+     example:"สับสน RTO กับ RPO หรือ controller กับ processor เสียคะแนนง่าย",
+     kids:[
+      {th:"Shared responsibility model", en:"IaaS/PaaS/SaaS split",
+       explain:"ผู้ให้ดูแลชั้นล่างตามโมเดล ลูกค้าดูแลข้อมูล ตัวตน และการตั้งค่าที่เปิดให้เสมอ",
+       example:"บน SaaS อีเมล ผู้ให้แพตช์เซิร์ฟเวอร์ ลูกค้าต้องเปิด MFA และไม่แชร์รหัส"},
+      {th:"Crypto-shredding", en:"Destroy by destroying keys",
+       explain:"ทำให้ข้อมูลอ่านไม่ได้โดยทำลายคีย์ เหมาะเมื่อจับสื่อจริงไม่ได้",
+       example:"เลิกโปรเจกต์แล้ว schedule key deletion ใน KMS พร้อมบันทึกหลักฐาน"},
+      {th:"Data controller / processor", en:"Who decides vs who processes",
+       explain:"ผู้ควบคุมกำหนดทำไมจึงประมวลผล ผู้ประมวลผลทำตามคำสั่ง",
+       example:"ร้านค้าออนไลน์เป็นผู้ควบคุม Stripe เป็นผู้ประมวลผลการชำระเงิน"},
+      {th:"CASB", en:"Cloud Access Security Broker",
+       explain:"นายหน้านโยบายระหว่างผู้ใช้กับคลาวด์ เห็นบริการที่ไม่ได้รับอนุมัติได้",
+       example:"บล็อกการอัปโหลดรายชื่อลูกค้าขึ้นแอปแชร์ไฟล์ส่วนตัว"},
+      {th:"SOC 2 Type II", en:"Controls over a period",
+       explain:"Type I ดูออกแบบ ณ วัน Type II ดูว่าทำงานตลอดช่วงเวลา",
+       example:"ผู้ให้ส่งรายงาน Type II 12 เดือนล่าสุด ไม่ใช่ใบรับรองวันเดียว"},
+      {th:"Vendor lock-in", en:"Hard to leave a provider",
+       explain:"เกิดจาก API เฉพาะ รูปแบบข้อมูล และค่าออกข้อมูล",
+       example:"ค่า egress แพงและสคีมาเฉพาะ ทำให้ย้ายออกไม่คุ้ม ทั้งที่สัญญาอนุญาต"}
+     ]}
+  ]
+}
+];
+
+const treeEl = document.getElementById("tree");
+const detailEl = document.getElementById("detail");
+let open = new Set(["ch1","ch2","ch3","ch4","ch5","ch6","ch7","app"]);
+let activeId = null;
+function walk(nodes, prefix, acc=[]){
+  nodes.forEach((n,i)=>{
+    const id = n.id || prefix + "-" + i;
+    n._id = id;
+    acc.push(n);
+    if(n.kids) walk(n.kids, id, acc);
+  });
+  return acc;
+}
+const FLAT = walk(DATA, "r");
+
+function renderNode(n, parentColor){
+  const color = n.color || parentColor || "";
+  const has = !!(n.kids && n.kids.length);
+  const isOpen = open.has(n._id);
+  const li = document.createElement("li");
+  const row = document.createElement("div");
+  row.className = "item " + color + (activeId===n._id ? " active":"");
+  row.dataset.id = n._id;
+  row.innerHTML = `
+    <span class="toggle ${has?"":"empty"}">${has ? (isOpen ? "▾":"▸") : "·"}</span>
+    <i class="mark"></i>
+    <span class="title">${n.th}${n.en?`<span class="en">${n.en}</span>`:""}</span>
+    ${n.ch?`<span class="badge">บท ${n.ch}</span>`:""}
+  `;
+  row.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    if(has && e.target.closest(".toggle")){
+      if(open.has(n._id)) open.delete(n._id); else open.add(n._id);
+      draw(); return;
+    }
+    activeId = n._id;
+    if(has) open.add(n._id);
+    showDetail(n);
+    draw();
+  });
+  li.appendChild(row);
+  if(has && isOpen){
+    const ul = document.createElement("ul");
+    ul.className = "node branch";
+    n.kids.forEach(k=> ul.appendChild(renderNode(k, color)));
+    li.appendChild(ul);
+  }
+  return li;
+}
+
+function showHome(){
+  detailEl.innerHTML = `<div class="kicker">${HOME.kicker}</div><h2>${HOME.title}</h2><div class="meta">${HOME.meta}</div>${HOME.body}`;
+}
+function showDetail(n){
+  if(n.detail){
+    detailEl.innerHTML = `<div class="kicker">${n.detail.kicker}</div><h2>${n.detail.title}</h2><div class="meta">${n.detail.meta}</div>${n.detail.body}`;
+    return;
+  }
+  detailEl.innerHTML = `
+    <div class="kicker">${n.ch ? "บท "+n.ch : "หัวข้อย่อย"}</div>
+    <h2>${n.th}</h2>
+    <div class="meta">${n.en||""}</div>
+    <div class="note"><b>คำอธิบาย</b><br>${n.explain||"คลิกบทแม่เพื่อดูภาพรวม"}</div>
+    ${n.example?`<div class="ex"><b>ตัวอย่าง</b><br>${n.example}</div>`:""}
+    ${n.kids?`<p class="meta" style="margin-top:12px">มีหัวข้อย่อย ${n.kids.length} ข้อ — กด ▸ เพื่อขยาย</p>`:""}
+  `;
+}
+function draw(){
+  treeEl.innerHTML = "";
+  DATA.forEach(ch => treeEl.appendChild(renderNode(ch, ch.color)));
+}
+function collectText(n){
+  return ((n.th||"")+" "+(n.en||"")+" "+(n.explain||"")+" "+(n.example||"")).toLowerCase();
+}
+document.getElementById("expandAll").onclick = ()=>{ FLAT.forEach(n=>{ if(n.kids) open.add(n._id); }); draw(); };
+document.getElementById("collapseAll").onclick = ()=>{ open = new Set(); draw(); };
+document.getElementById("reset").onclick = ()=>{
+  document.getElementById("q").value = "";
+  document.querySelectorAll(".hit").forEach(el=>el.classList.remove("hit"));
+};
+document.getElementById("q").addEventListener("input", e=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".hit").forEach(el=>el.classList.remove("hit"));
+  if(!q) return;
+  FLAT.forEach(n=>{
+    if(collectText(n).includes(q)){
+      const parts = n._id.split("-");
+      let cur = parts[0];
+      open.add(cur);
+      for(let i=1;i<parts.length-1;i++){ cur += "-" + parts[i]; open.add(cur); }
+    }
+  });
+  draw();
+  document.querySelectorAll(".item").forEach(el=>{
+    const n = FLAT.find(x=>x._id===el.dataset.id);
+    if(n && collectText(n).includes(q)) el.classList.add("hit");
+  });
+});
+showHome();
+draw();
+</script>
+</body>
+</html>
