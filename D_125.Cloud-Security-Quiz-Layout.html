@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloud Security Practice Quiz — EN / TH</title>
+<!-- Layout and style preview only. No JavaScript is included yet. -->
+<style>
+:root{
+  --bg:#0f1419; --bg2:#161d27; --card:#1c2533; --line:#2a3648;
+  --text:#e8eef7; --muted:#93a0b5; --accent:#4cc9f0; --accent2:#7c5cff;
+  --good:#2ecc71; --bad:#ff5d73; --warn:#ffc857; --chip:#243044; --th:#ffd59a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:15px/1.55 "Segoe UI","Noto Sans Thai",Tahoma,sans-serif}
+button,input,select{font:inherit}
+.app{max-width:980px;margin:0 auto;padding:20px 16px 80px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:800;color:#081018}
+h1{font-size:1.12rem;margin:0}
+.sub{color:var(--muted);font-size:.82rem}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.8rem;color:var(--muted)}
+.chip b{color:var(--text);font-weight:650}
+.langbar{display:flex;gap:0;margin:0 0 12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;width:fit-content}
+.langbar button{background:var(--bg2);border:0;color:var(--muted);padding:8px 16px;cursor:pointer}
+.langbar button.on{background:linear-gradient(135deg,#1e8fb8,#4cc9f0);color:#06202a;font-weight:700}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.toolbar input,.toolbar select, .btn{
+  background:var(--bg2);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:8px 12px
+}
+.toolbar input{min-width:200px;flex:1}
+.btn{cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:linear-gradient(135deg,#1e8fb8,#4cc9f0);color:#06202a;font-weight:700;border:0}
+.btn.ghost{background:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 22px 16px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.qmeta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px;color:var(--muted);font-size:.82rem}
+.qtext{font-size:1.08rem;font-weight:600;margin:0 0 6px;white-space:pre-wrap}
+.qth{color:var(--th);font-weight:500;font-size:1rem;margin:0 0 16px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;width:100%;color:var(--text)}
+.opt:hover{border-color:#4a5d78}
+.letter{flex:0 0 28px;height:28px;border-radius:8px;background:#2a3648;display:grid;place-items:center;font-weight:700}
+.optbody{flex:1}
+.en{display:block}
+.th{display:block;color:var(--th);font-size:.95rem;margin-top:3px}
+.opt.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.opt.correct{border-color:var(--good);background:rgba(46,204,113,.08)}
+.opt.correct .letter{background:var(--good);color:#06210f}
+.opt.wrong{border-color:var(--bad);background:rgba(255,93,115,.08)}
+.opt.wrong .letter{background:var(--bad);color:#2a050c}
+.explain{margin-top:14px;padding:12px 14px;border-radius:12px;background:#132033;border:1px solid #2a4a66;display:none}
+.explain.show{display:block}
+.explain h3{margin:0 0 6px;font-size:.85rem;color:var(--accent)}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.progress{height:8px;background:#243044;border-radius:99px;overflow:hidden;margin:12px 0 4px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .25s}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:6px;margin-top:16px}
+.gbtn{height:36px;border-radius:8px;border:1px solid var(--line);background:var(--bg2);color:var(--muted);cursor:pointer}
+.gbtn.cur{outline:2px solid var(--accent)}
+.gbtn.ok{background:rgba(46,204,113,.18);color:var(--good);border-color:transparent}
+.gbtn.no{background:rgba(255,93,115,.18);color:var(--bad);border-color:transparent}
+.gbtn.flag{box-shadow:inset 0 -3px 0 var(--warn)}
+.disclaimer{margin-top:22px;color:var(--muted);font-size:.78rem;line-height:1.45}
+.k{font-size:.75rem;color:var(--muted)}
+.missing{opacity:.85}
+.missing .th{color:#c9b08a}
+@media (max-width:640px){
+  .qtext{font-size:1rem}
+  .toolbar input{min-width:0;width:100%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">C</div>
+      <div>
+        <h1 id="title">Cloud Security Practice Exam</h1>
+        <div class="sub" id="subtitle">English / Thai study mode · 125 questions across six domains</div>
+      </div>
+    </div>
+    <div class="stats">
+      <span class="chip"><span id="lblQ">Question</span> <b id="pos">1</b> / <b id="total">125</b></span>
+      <span class="chip"><span id="lblScore">Score</span> <b id="score">2</b></span>
+      <span class="chip"><span id="lblAns">Answered</span> <b id="answered">4/125</b></span>
+      <span class="chip"><span id="lblAcc">Accuracy</span> <b id="acc">50%</b></span>
+      <span class="chip"><span id="lblTr">Translated</span> <b id="trcount">125/125</b></span>
+    </div>
+  </header>
+
+  <div class="langbar" role="tablist" aria-label="Language">
+    <button type="button" id="langEN">English</button>
+    <button type="button" id="langTH">ไทย</button>
+    <button type="button" id="langBOTH" class="on">ทั้งสอง · Both</button>
+  </div>
+
+  <div class="toolbar">
+    <input id="search" placeholder="Search / ค้นหา…" />
+    <select id="filter">
+      <option value="all">All / ทั้งหมด</option>
+      <option value="unseen">Unanswered / ยังไม่ตอบ</option>
+      <option value="flagged">Flagged / ติดธง</option>
+      <option value="wrong">Incorrect / ผิด</option>
+      <option value="right">Correct / ถูก</option>
+      <option value="thai">Has Thai / มีคำแปล</option>
+    </select>
+    <button class="btn" id="shuffleBtn">Shuffle</button>
+    <button class="btn" id="resetBtn">Reset</button>
+    <button class="btn" id="examBtn">Exam mode: Off</button>
+  </div>
+
+  <div class="progress"><div class="bar" id="bar" style="width:3.2%"></div></div>
+
+  <section class="card" id="card">
+    <div class="qmeta">
+      <span id="qid">Q1 · Domain 1 · Cloud Concepts, Architecture and Design</span>
+      <span><button class="btn ghost" id="flagBtn">☆ Flag</button></span>
+    </div>
+    <p class="qtext" id="qtext">An attacker generates a sustained flood of synthetic API requests against a cloud-hosted application to deliberately trigger auto-scaling events and inflate the target organization&#x27;s cloud usage charges. The security team wants to identify the earliest indicator of this attack. What is the MOST effective first-line detection mechanism for this type of abuse?</p>
+    <p class="qth" id="qth">ผู้โจมตีส่ง synthetic API request จำนวนมหาศาลอย่างต่อเนื่องไปยังแอปพลิเคชันที่โฮสต์บนคลาวด์ เพื่อจงใจกระตุ้นเหตุการณ์ auto-scaling และทำให้ค่าใช้จ่ายการใช้งานคลาวด์ขององค์กรเป้าหมายพุ่งสูง ทีมความมั่นคงปลอดภัยต้องการระบุตัวบ่งชี้แรกสุดของการโจมตีนี้ กลไกการตรวจจับด่านแรกที่มีประสิทธิผลที่สุด (MOST effective) สำหรับการใช้ในทางที่ผิดลักษณะนี้คืออะไร</p>
+    <div class="opts" id="opts">
+      <button class="opt" type="button"><span class="letter">A</span><span class="optbody"><span class="en">Reviewing IAM access logs to identify the account that triggered the scaling events, since unauthorized account access is the prerequisite for launching synthetic traffic attacks</span><span class="th">ตรวจสอบ IAM access log เพื่อระบุบัญชีที่กระตุ้นเหตุการณ์ scaling เพราะการเข้าถึงบัญชีโดยไม่ได้รับอนุญาตเป็นข้อกำหนดเบื้องต้นของการโจมตีด้วยทราฟฟิกสังเคราะห์</span></span></button>
+      <button class="opt correct" type="button"><span class="letter">B</span><span class="optbody"><span class="en">Monitoring billing and usage patterns, because measured service tracks every unit of compute, storage, and network consumption, and anomalous spikes in these metrics signal potential cost-based attacks</span><span class="th">เฝ้าติดตามรูปแบบการเรียกเก็บเงินและการใช้งาน เพราะ measured service ติดตามการใช้ compute, storage และ network ทุกหน่วย และการพุ่งสูงผิดปกติของเมตริกเหล่านี้บ่งชี้การโจมตีที่มุ่งสร้างต้นทุน</span></span></button>
+      <button class="opt selected wrong" type="button"><span class="letter">C</span><span class="optbody"><span class="en">Disabling rapid elasticity during non-peak hours to prevent attackers from exploiting the auto-scaling mechanism as a cost amplification vector</span><span class="th">ปิด rapid elasticity ในช่วงนอกเวลาคับคั่ง เพื่อป้องกันผู้โจมตีใช้กลไก auto-scaling เป็นช่องทางขยายต้นทุน</span></span></button>
+      <button class="opt" type="button"><span class="letter">D</span><span class="optbody"><span class="en">Implementing network-level firewalls and intrusion detection systems to block inbound synthetic traffic before it reaches the application tier and triggers a scaling response</span><span class="th">ติดตั้ง firewall ระดับเครือข่ายและ IDS เพื่อบล็อกทราฟฟิกสังเคราะห์ขาเข้าก่อนถึงชั้นแอปพลิเคชันและก่อให้เกิดการ scale</span></span></button>
+    </div>
+    <div class="explain show" id="explain">
+      <h3 id="exph">Explanation / คำอธิบาย</h3>
+      <div id="expbody"><p><b>Incorrect.</b> Suggested answer: <b>B</b></p><p>Measured service tracks every unit of compute, storage, and network consumption, making billing and usage monitoring the earliest indicator of cost-based attacks exploiting auto-scaling. This attack uses external synthetic traffic and requires no unauthorized account access, so IAM log review would not surface it. Network firewalls and IDS may reduce traffic volume but are not the earliest detection mechanism for cost-based abuse. Disabling rapid elasticity removes a core cloud capability and provides no detection visibility. It is an operational constraint, not a detection control.</p><p style='color:var(--th)'>Measured service ติดตามการใช้ compute, storage และ network ทุกหน่วย การเฝ้าติดตามการเรียกเก็บเงินและการใช้งานจึงเป็นตัวบ่งชี้แรกสุดของการโจมตีที่มุ่งสร้างต้นทุนโดยใช้ประโยชน์จาก auto-scaling การโจมตีนี้ใช้ทราฟฟิกสังเคราะห์จากภายนอกและไม่ต้องเข้าถึงบัญชีโดยไม่ได้รับอนุญาต การตรวจ IAM log จึงไม่พบสิ่งใด Firewall และ IDS อาจลดปริมาณทราฟฟิกได้ แต่ไม่ใช่กลไกตรวจจับที่เร็วที่สุดสำหรับการใช้ในทางที่ผิดด้านต้นทุน การปิด rapid elasticity ตัดความสามารถหลักของคลาวด์และไม่ทำให้มองเห็นการโจมตี เป็นเพียงข้อจำกัดเชิงปฏิบัติการ ไม่ใช่มาตรการตรวจจับ</p><p class="k">Exam objective 1.1</p></div>
+    </div>
+    <div class="nav">
+      <button class="btn" id="prevBtn">← Prev</button>
+      <button class="btn primary" id="nextBtn">Next →</button>
+      <span class="k" id="keys">Keys: A–D choose · N next · P prev · F flag · T language</span>
+    </div>
+  </section>
+
+  <h2 id="jumpH" style="font-size:.95rem;margin:22px 0 8px;color:var(--muted)">Jump to question</h2>
+  <div class="grid" id="grid"><button class="gbtn cur no">1</button><button class="gbtn ok">2</button><button class="gbtn ok">3</button><button class="gbtn no">4</button><button class="gbtn flag">5</button><button class="gbtn">6</button><button class="gbtn">7</button><button class="gbtn">8</button><button class="gbtn">9</button><button class="gbtn">10</button><button class="gbtn">11</button><button class="gbtn">12</button><button class="gbtn">13</button><button class="gbtn">14</button><button class="gbtn">15</button><button class="gbtn">16</button><button class="gbtn">17</button><button class="gbtn">18</button><button class="gbtn">19</button><button class="gbtn">20</button><button class="gbtn">21</button><button class="gbtn">22</button><button class="gbtn">23</button><button class="gbtn">24</button><button class="gbtn">25</button><button class="gbtn">26</button><button class="gbtn">27</button><button class="gbtn">28</button><button class="gbtn">29</button><button class="gbtn">30</button><button class="gbtn">31</button><button class="gbtn">32</button><button class="gbtn">33</button><button class="gbtn">34</button><button class="gbtn">35</button><button class="gbtn">36</button><button class="gbtn">37</button><button class="gbtn">38</button><button class="gbtn">39</button><button class="gbtn">40</button><button class="gbtn">41</button><button class="gbtn">42</button><button class="gbtn">43</button><button class="gbtn">44</button><button class="gbtn">45</button><button class="gbtn">46</button><button class="gbtn">47</button><button class="gbtn">48</button><button class="gbtn">49</button><button class="gbtn">50</button><button class="gbtn">51</button><button class="gbtn">52</button><button class="gbtn">53</button><button class="gbtn">54</button><button class="gbtn">55</button><button class="gbtn">56</button><button class="gbtn">57</button><button class="gbtn">58</button><button class="gbtn">59</button><button class="gbtn">60</button><button class="gbtn">61</button><button class="gbtn">62</button><button class="gbtn">63</button><button class="gbtn">64</button><button class="gbtn">65</button><button class="gbtn">66</button><button class="gbtn">67</button><button class="gbtn">68</button><button class="gbtn">69</button><button class="gbtn">70</button><button class="gbtn">71</button><button class="gbtn">72</button><button class="gbtn">73</button><button class="gbtn">74</button><button class="gbtn">75</button><button class="gbtn">76</button><button class="gbtn">77</button><button class="gbtn">78</button><button class="gbtn">79</button><button class="gbtn">80</button><button class="gbtn">81</button><button class="gbtn">82</button><button class="gbtn">83</button><button class="gbtn">84</button><button class="gbtn">85</button><button class="gbtn">86</button><button class="gbtn">87</button><button class="gbtn">88</button><button class="gbtn">89</button><button class="gbtn">90</button><button class="gbtn">91</button><button class="gbtn">92</button><button class="gbtn">93</button><button class="gbtn">94</button><button class="gbtn">95</button><button class="gbtn">96</button><button class="gbtn">97</button><button class="gbtn">98</button><button class="gbtn">99</button><button class="gbtn">100</button><button class="gbtn">101</button><button class="gbtn">102</button><button class="gbtn">103</button><button class="gbtn">104</button><button class="gbtn">105</button><button class="gbtn">106</button><button class="gbtn">107</button><button class="gbtn">108</button><button class="gbtn">109</button><button class="gbtn">110</button><button class="gbtn">111</button><button class="gbtn">112</button><button class="gbtn">113</button><button class="gbtn">114</button><button class="gbtn">115</button><button class="gbtn">116</button><button class="gbtn">117</button><button class="gbtn">118</button><button class="gbtn">119</button><button class="gbtn">120</button><button class="gbtn">121</button><button class="gbtn">122</button><button class="gbtn">123</button><button class="gbtn">124</button><button class="gbtn">125</button></div>
+
+  <p class="disclaimer" id="disc">Unofficial practice set with an English/Thai toggle for study. Thai text is an AI-assisted translation and may be imperfect, so keep official terms in English when needed.</p>
+</div>
+</body>
+</html>
